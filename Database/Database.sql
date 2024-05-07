@@ -1,6 +1,14 @@
+-- Active: 1715110214981@@127.0.0.1@3306@schoolgamedb
 CREATE DATABASE IF NOT EXISTS SchoolGameDB;
 
 USE SchoolGameDB;
+
+CREATE TABLE IF NOT EXISTS Classes (
+    id INT AUTO_INCREMENT NOT NULL UNIQUE,
+    tag VARCHAR(15) NOT NULL UNIQUE,
+    --
+    PRIMARY KEY (id)
+);
 
 CREATE TABLE IF NOT EXISTS Students (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
@@ -10,69 +18,77 @@ CREATE TABLE IF NOT EXISTS Students (
     surname VARCHAR(25) NOT NULL,
     name VARCHAR(25) NOT NULL,
     class INT NOT NULL,
-
+    --
     PRIMARY KEY (id),
-    FOREIGN KEY (class) REFERENCES (Class)
-)
+    FOREIGN KEY (class) REFERENCES Classes(id)
+);
 
-CREATE TABLE IF NOT EXISTS Classes (
+CREATE TABLE IF NOT EXISTS Teachers (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
-    tag VARCHAR(15) NOT NULL UNIQUE,
-
-    PRIMARY KEY (id),
-)
+    username VARCHAR(16) NOT NULL UNIQUE,
+    email VARCHAR(40) NOT NULL UNIQUE,
+    password VARCHAR(25) NOT NULL,
+    surname VARCHAR(30) NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    --
+    PRIMARY KEY (id)
+);
 
 CREATE TABLE IF NOT EXISTS VirtualClasses (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
     joinLink VARCHAR(255) NOT NULL UNIQUE,
     tag VARCHAR(15) NOT NULL UNIQUE,
     subject VARCHAR(25) NOT NULL,
-
-    PRIMARY KEY (id)
-)
-
-CREATE TABLE IF NOT EXISTS Links (
-    id INT AUTO_INCREMENT NOT NULL UNIQUE,
-    virtualClass INT NOT NULL,
-    student INT NOT NULL,
-
+    teacher INT NOT NULL,
+    --
     PRIMARY KEY (id),
-    FOREIGN KEY (virtualClass, student) REFERENCES (VirtualClasses, Students)
-)
-
-CREATE TABLE IF NOT EXISTS Teachers (
-    id INT AUTO_INCREMENT NOT NULL UNIQUE,
-    name VARCHAR(30) NOT NULL,
-    surname VARCHAR(30) NOT NULL,
-    email VARCHAR(40) NOT NULL UNIQUE,
-    username VARCHAR(16) NOT NULL UNIQUE,
-    password VARCHAR(25) NOT NULL,
-
-    PRIMARY KEY (id)
-)
+    FOREIGN KEY (teacher) REFERENCES Teachers(id)
+);
 
 CREATE TABLE IF NOT EXISTS Arguments (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
-    name VARCHAR(25) NOT NULL,
-
+    tag VARCHAR(25) NOT NULL,
+    --
     PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE Games (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
     title VARCHAR(25) NOT NULL,
-    virtualCoins INT NOT NULL,
     argument INT NOT NULL,
-
+    coins INT NOT NULL,
+    --
     PRIMARY KEY(id),
-    FOREIGN KEY(argument) REFERENCES (Arguments)
-)
+    FOREIGN KEY(argument) REFERENCES Arguments(id)
+);
 
-CREATE TABLE References (
+CREATE TABLE IF NOT EXISTS LinksUsers (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
-    game INT NOT NULL,
-    virtualcClass INT NOT NULL,
+    virtualClass INT NOT NULL,
+    student INT NOT NULL,
+    --
+    PRIMARY KEY (id),
+    FOREIGN KEY (student) REFERENCES Students(id),
+    FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
+);
 
-    PRIMARY KEY(id),
-    FOREIGN KEY(virtualClass, game) REFERENCES (VirtualClasses, Games)
-)
+CREATE TABLE LinksGames (
+    id INT AUTO_INCREMENT NOT NULL UNIQUE,
+    virtualClass INT NOT NULL,
+    game INT NOT NULL,
+    --
+    PRIMARY KEY (id),
+    FOREIGN KEY (game) REFERENCES Games(id),
+    FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
+);
+
+CREATE TABLE Rewards (
+    id INT AUTO_INCREMENT NOT NULL UNIQUE,
+    student INT NOT NULL,
+    coins INT NOT NULL,
+    game INT NOT NULL,
+    --
+    PRIMARY KEY (id),
+    FOREIGN KEY (game) REFERENCES Games(id),
+    FOREIGN KEY (student) REFERENCES Students(id)
+);
