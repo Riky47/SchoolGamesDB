@@ -1,4 +1,4 @@
--- Active: 1715110214981@@127.0.0.1@3306@schoolgamedb
+-- Active: 1715156375912@@127.0.0.1@3306@banca
 CREATE DATABASE IF NOT EXISTS SchoolGameDB;
 
 USE SchoolGameDB;
@@ -52,11 +52,11 @@ CREATE TABLE IF NOT EXISTS Arguments (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Games (
+CREATE TABLE IF NOT EXISTS Games (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
+    coins INT NOT NULL CHECK (coins >= 0),
     title VARCHAR(25) NOT NULL,
     argument INT NOT NULL,
-    coins INT NOT NULL,
     --
     PRIMARY KEY(id),
     FOREIGN KEY(argument) REFERENCES Arguments(id)
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS LinksUsers (
     FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
 );
 
-CREATE TABLE LinksGames (
+CREATE TABLE IF NOT EXISTS LinksGames (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
     virtualClass INT NOT NULL,
     game INT NOT NULL,
@@ -82,10 +82,10 @@ CREATE TABLE LinksGames (
     FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
 );
 
-CREATE TABLE Rewards (
+CREATE TABLE IF NOT EXISTS Rewards (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
+    coins INT NOT NULL CHECK (coins >= 0),
     student INT NOT NULL,
-    coins INT NOT NULL,
     game INT NOT NULL,
     --
     PRIMARY KEY (id),
