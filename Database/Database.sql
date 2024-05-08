@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS Arguments (
 CREATE TABLE IF NOT EXISTS Games (
     id INT AUTO_INCREMENT NOT NULL UNIQUE,
     coins INT NOT NULL CHECK (coins >= 0),
+    description VARCHAR(160) NOT NULL,
     title VARCHAR(25) NOT NULL,
     argument INT NOT NULL,
     --
