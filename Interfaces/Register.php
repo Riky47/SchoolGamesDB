@@ -59,6 +59,7 @@ if (isset($_POST["register"])) {
 <html>
     <head>
         <title>SchoolGamesDB</title>
+        <link rel="stylesheet" href="RegisterStyle.css">
     </head>
     <body>
         <h1>SchoolGamesDB</h1>
