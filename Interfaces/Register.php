@@ -6,7 +6,7 @@
         include_once(__DIR__. "/../Sources/SecureSQL.php");
         
         $isStudents = $_POST["type"] == "student";
-        $conn->query("INSERT INTO ". (isStudents ? "Students" : "Teachers") ."(name, surname, username, email, password". (isStudents ? ", class" : "") .") VALUES ('".
+        $conn->query("INSERT INTO ". ($isStudents ? "Students" : "Teachers") ."(name, surname, username, email, password". ($isStudents ? ", class" : "") .") VALUES ('".
             $secureSQL($_POST["name"])      ."', '".
             $secureSQL($_POST["surname"])   ."', '". 
             $secureSQL($_POST["username"])  ."', '".
@@ -66,7 +66,7 @@
         <h1>SchoolGamesDB</h1>
         <div id="leaderDiv">
             <h3>Register</h3>
-            <form method="POST" action="<?php echo "Register.php"; ?>" id="mainForm">
+            <form method="POST" id="mainForm">
                 Type: <select name="type" id="typeSwitch" onchange="updateType()" required>
                     <option value="student" selected>Student</option>
                     <option value="teacher">Teacher</option>
