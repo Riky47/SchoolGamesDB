@@ -63,6 +63,7 @@ if (isset($_POST["register"])) {
     </head>
     <body>
         <h1>SchoolGamesDB</h1>
+        <div id="leaderDiv">
         <h3>Register</h3>
 
         <form method="post" action="/Interfaces/Register.php" id="mainForm">
@@ -77,5 +78,6 @@ if (isset($_POST["register"])) {
             EMail: <input type="email" name="email" placeholder="mario.rossi@email.it" required><br>
             Password: <input type="password" name="password" placeholder="M****R****1!" required><br>
         </form>
+        </div>
     </body>
 </html>
