@@ -44,7 +44,7 @@
                     ?>
                     </select><br>`
 
-                form.innerHTML = html + `<br><input type="submit" name="register" value="Register">`
+                form.innerHTML = html + `<br><input type="submit" class="submit" name="register" value="Register">`
                 var select = document.getElementById("typeSwitch")
                 select.value = value
             }

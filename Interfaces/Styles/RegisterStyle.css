@@ -7,6 +7,20 @@ h3{
 	text-align: center;
 	color: #7B68EE;
 }
+body {
+	background: #FFFFFF;
+	background-image: linear-gradient(#483D8B, #7B68EE);
+	background-repeat: no-repeat;
+}
+input{
+	border: none;
+	border-bottom: 2px solid #7B68EE;
+}
+
+.submit{
+	background-color: #7B68EE;
+}
+
 #leaderDiv {
 	margin: 200px 500px 300px 500px;
 	border: 2px;
@@ -14,13 +28,4 @@ h3{
 	background: white;
 	border-radius: 25px;
 	box-shadow: 15px 24px 24px 0 rgba(0, 0, 0, 0.24), 0 15px 35px 0 rgba(0, 0, 0, 0.19);
-}
-body {
-	background: #FFFFFF;
-	background-image: linear-gradient(#483D8B, #7B68EE);
-	background-repeat: no-repeat;
-}
-input{
-	  border: none;
-	border-bottom: 2px solid #7B68EE;
 }
