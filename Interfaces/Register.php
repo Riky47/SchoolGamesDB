@@ -66,7 +66,7 @@
         <h1>SchoolGamesDB</h1>
         <div id="leaderDiv">
             <h3>Register</h3>
-            <form method="POST" id="mainForm">
+            <form method="POST" name="register" id="mainForm">
                 Type: <select name="type" id="typeSwitch" onchange="updateType()" required>
                     <option value="student" selected>Student</option>
                     <option value="teacher">Teacher</option>
