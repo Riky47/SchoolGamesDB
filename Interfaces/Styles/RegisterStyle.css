@@ -20,6 +20,9 @@ input{
 .submit{
 	background-color: #7B68EE;
 }
+.error{
+	color: #ff0000;
+}
 
 #leaderDiv {
 	margin: 200px 500px 300px 500px;

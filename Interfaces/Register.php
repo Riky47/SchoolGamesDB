@@ -1,9 +1,11 @@
+<!DOCTYPE html>
+
 <?php
     include_once(__DIR__. "/../Sources/Connect.php");
     
     if (isset($_POST["register"])) {
-        echo "DIOPOR";
         include_once(__DIR__. "/../Sources/SecureSQL.php");
+        include_once(__DIR__. "/../Sources/Redirect.php");
         
         $isStudents = $_POST["type"] == "student";
         $conn->query("INSERT INTO ". ($isStudents ? "Students" : "Teachers") ."(name, surname, username, email, password". ($isStudents ? ", class" : "") .") VALUES ('".
@@ -11,15 +13,15 @@
             $secureSQL($_POST["surname"])   ."', '". 
             $secureSQL($_POST["username"])  ."', '".
             $secureSQL($_POST["email"])     ."', '". 
-            $secureSQL($_POST["password"])  ."', ". 
+            password_hash($_POST["password"], PASSWORD_ARGON2I)  ."', ". 
             "(SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."'));"
         );
 
-        // To review
+        $redirect("Interfaces/Login.php");
+        die();
     }
 ?>
 
-<!DOCTYPE html>
 <html>
     <head>
         <script>
