@@ -8,6 +8,7 @@
     </head>
     <body>
         <h1>SchoolGamesDB</h1>
+        <div id="space"></div>
         <div id="leaderDiv">
             <h3>Login</h3>
 
