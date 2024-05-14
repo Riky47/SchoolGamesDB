@@ -8,7 +8,7 @@ session_destroy();
 <html>
     <head>
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/Default.css">
     </head>
     <body>
         <h1>SchoolGamesDB</h1>

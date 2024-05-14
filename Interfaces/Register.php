@@ -16,15 +16,15 @@
                 last = value
 
                 if (value == "student")
-                    html += `Class: <select class="class" name="class" required>
+                    html += `<tr><td class="field">Class:</td> <td class="box"><select class="class" name="class" required>
                     <?php
                         include_once(__DIR__. "/../Sources/Connect.php");
 
-                        $result = $conn->query("SELECT tag FROM Classes");
+                        $result = $conn->query("SELECT tag FROM Classes ORDER BY tag ASC");
                         while ($row = $result->fetch_assoc())
                             echo "<option class='option' value=". $row["tag"] .">". $row["tag"] ."</option>";
                     ?>
-                    </select><br>`
+                    </select><td></tr>`
 
                 form.innerHTML = html + `<br><input type="submit" class="submit" name="register" value="Register">`
                 var select = document.getElementById("typeSwitch")
@@ -43,7 +43,7 @@
 
         <title>SchoolGamesDB</title>
         <link rel="stylesheet" href="Styles/RegisterStyle.css">
-        <link rel="stylesheet" href="Styles/default.css">
+        <link rel="stylesheet" href="Styles/Default.css">
     </head>
 
     <body>
@@ -56,36 +56,48 @@
                 if (isset($_POST["register"])) {
                     include_once(__DIR__. "/../Sources/SecureSQL.php");
                     include_once(__DIR__. "/../Sources/Redirect.php");
+                    include_once(__DIR__. "/../Sources/Errors.php");
                     
-                    $isStudents = $_POST["type"] == "student";
-                    $conn->query("INSERT INTO ". ($isStudents ? "Students" : "Teachers") ."(name, surname, username, email, password". ($isStudents ? ", class" : "") .") VALUES ('".
-                        $secureSQL($_POST["name"])      ."', '".
-                        $secureSQL($_POST["surname"])   ."', '". 
-                        $secureSQL($_POST["username"])  ."', '".
-                        $secureSQL($_POST["email"])     ."', '". 
-                        password_hash($_POST["password"], PASSWORD_ARGON2I)  .($isStudents ? ("', ". 
-                        "(SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."')") : "").");"
-                    );
+                    $student = $conn->query("SELECT * FROM Students WHERE email = '". $secureSQL($_POST["email"]) ."' OR username = '". $secureSQL($_POST["username"]) ."';");
+                    $teacher = $conn->query("SELECT * FROM Teachers WHERE email = '". $secureSQL($_POST["email"]) ."' OR username = '". $secureSQL($_POST["username"]) ."';");
+                    
+                    if ($student->num_rows > 0 || $teacher->num_rows > 0)
+                        $error("Credentials already in use!");
 
-                    if ($user->num_rows > 0)
-                        $redirect("Login.php");
-                    else
-                        echo "<h3 class='error'>Error!</h3>";
+                    else {
+                        $isStudents = $_POST["type"] == "student";
+                        $result = $conn->query("INSERT INTO ". ($isStudents ? "Students" : "Teachers") ."(name, surname, username, email, password". ($isStudents ? ", class" : "") .") VALUES ('".
+                            $secureSQL($_POST["name"])      ."', '".
+                            $secureSQL($_POST["surname"])   ."', '". 
+                            $secureSQL($_POST["username"])  ."', '".
+                            $secureSQL($_POST["email"])     ."', '". 
+                            password_hash($_POST["password"], PASSWORD_ARGON2I)  .($isStudents ? ("', ". 
+                            "(SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."')") : "").");"
+                        );
+
+                        if ($result)
+                            $redirect("Login.php");
+                        else
+                            $error("Error, please contact a developer!");
+                    }
                 }
             ?>
 
-            <form method="POST" name="register" id="mainForm">
-                Type: <select name="type" id="typeSwitch" onchange="updateType()" required>
-                    <option value="student" selected>Student</option>
-                    <option value="teacher">Teacher</option>
-                </select><br><br>
+            <form method="post">
+                <table id="mainForm">
+                    <tr><td class="field">Type:</td>
+                    <td class="box"><select name="type" id="typeSwitch" onchange="updateType()" required>
+                        <option value="student" selected>Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select></td></tr>
 
-                Name: <input type="text" name="name" placeholder="Mario" required><br>
-                Surname: <input type="text" name="surname" placeholder="Rossi" required><br>
-                Nickname: <input type="text" name="username" placeholder="MarRosso" required><br>
-                EMail: <input type="email" name="email" placeholder="mario.rossi@email.it" required><br>
-                Password: <input type="password" name="password" placeholder="M****R****1!" required><br>
-            </form>
+                    <tr><td class="field">Name:</td> <td class="box"><input type="text" name="name" placeholder="Mario" required></td></tr>
+                    <tr><td class="field">Surname:</td> <td class="box"><input type="text" name="surname" placeholder="Rossi" required></td></tr>
+                    <tr><td class="field">Nickname:</td> <td class="box"><input type="text" name="username" placeholder="MarRosso" required></td></tr>
+                    <tr><td class="field">EMail:</td> <td class="box"><input type="email" name="email" placeholder="mario.rossi@email.it" required></td></tr>
+                    <tr><td class="field">Password:</td> <td class="box"><input type="password" name="password" placeholder="M****R****1!" required></td></tr>
+                </table>
+            </form><br>
 
             <form action="Login.php" method="get">
                 <input type="submit" class="submit" value="Sign-In"/>

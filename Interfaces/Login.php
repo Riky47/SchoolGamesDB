@@ -5,6 +5,7 @@
     <head>
         <title>SchoolGamesDB</title>
         <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/Default.css">
     </head>
     <body>
         <h1>SchoolGamesDB</h1>
@@ -15,8 +16,8 @@
             <?php
                 if (isset($_POST["login"])) {
                     include_once(__DIR__. "/../Sources/SecureSQL.php");
+                    include_once(__DIR__. "/../Sources/Errors.php");
 
-                    $error = "<h3 class='error'>Invalid credentials!</h3>";
                     $email = $secureSQL($_POST["email"]);
                     $isStudent = true;
                     $missing = false;
@@ -28,7 +29,7 @@
                         
                         if ($user->num_rows <= 0) {
                             $missing = true;
-                            echo $error;
+                            $error("Account not found!");
                         }
                     }
 
@@ -42,14 +43,16 @@
 
                             $redirect($isStudent ? "Student.php" : "Teacher.php");
                         } else
-                            echo $error;
+                            $error("Invalid credentials!");
                     }
                 }
             ?>
 
-            <form method="post" action="">
-                EMail: <input type="email" name="email" placeholder="mario.rossi@email.com" required><br>
-                Password: <input type="password" name="password" placeholder="M****R****1!" required><br>
+            <form method="post">
+                <table>
+                <tr><td class="field">EMail:</td> <td class="box"><input type="email" name="email" placeholder="mario.rossi@email.com" required></td></tr>
+                <tr><td class="field">Password:</td> <td class="box"><input type="password" name="password" placeholder="M****R****1!" required></td></tr>
+                <table>
 
                 <br><input type="submit" class="submit" name="login" value="Login">
             </form>
