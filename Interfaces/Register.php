@@ -38,11 +38,11 @@
                 last = value
 
                 if (value == "student")
-                    html += `Class: <select name="class" required>
+                    html += `Class: <select class="class" name="class" required>
                     <?php
                         $result = $conn->query("SELECT tag FROM Classes");
                         while ($row = $result->fetch_assoc())
-                            echo "<option value=". $row["tag"] .">". $row["tag"] ."</option>";
+                            echo "<option class='option' value=". $row["tag"] .">". $row["tag"] ."</option>";
                     ?>
                     </select><br>`
 

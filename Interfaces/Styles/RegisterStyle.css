@@ -18,7 +18,13 @@ input{
 }
 
 .submit{
-	background-color: #7B68EE;
+		color: white;
+		font-family: Garamond;
+		padding: 8px 20px;
+		text-align: center;
+		border-radius: 25px;
+		background-color: #483D8B;
+		cursor: pointer;
 }
 .error{
 	color: #ff0000;
