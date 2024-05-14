@@ -43,6 +43,7 @@
 
         <title>SchoolGamesDB</title>
         <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/default.css">
     </head>
 
     <body>

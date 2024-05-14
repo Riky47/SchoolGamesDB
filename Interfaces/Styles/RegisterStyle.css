@@ -1,37 +1,9 @@
-h1{
-	text-align: center;
-	color: white;
-	font-family: "Times New Roman", Times, serif;
-}
-h3{
-	text-align: center;
-	color: #7B68EE;
-}
-body {
-	background: #7B68EE;
-	background-image: linear-gradient(#483D8B, #7B68EE);
-	background-repeat: no-repeat;
-}
+
 input, .class, #typeSwitch{
 	border: none;
 	border-bottom: 2px solid #7B68EE;
 	width: 60%;
 }
-
-.submit{
-	color: white;
-	font-family: Garamond;
-	padding: 8px 20px;
-	text-align: center;
-	border-radius: 25px;
-	background-color: #483D8B;
-	cursor: pointer;
-	width: 80px
-}
-.error{
-	color: #ff0000;
-}
-
 #leaderDiv{
 	width: 300px;
 	margin:0 auto;
