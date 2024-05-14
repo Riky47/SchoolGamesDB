@@ -1,4 +1,4 @@
--- Active: 1712133423498@@127.0.0.1@3306@database
+-- Active: 1715156375912@@127.0.0.1@3306@schoolgamedb
 CREATE DATABASE IF NOT EXISTS SchoolGamesDB;
 
 USE SchoolGamesDB;
