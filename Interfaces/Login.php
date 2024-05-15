@@ -10,13 +10,19 @@
     <body>
         <h1>SchoolGamesDB</h1>
         <div id="space"></div>
+
         <div id="leaderDiv">
             <h3>Login</h3>
 
             <?php
-                if (isset($_POST["login"])) {
+                include_once(__DIR__. "/../Sources/Errors.php");
+
+                if (isset($_POST["logout"])) {
+                    session_destroy();
+                    $error("You have been logged out!");
+
+                } elseif (isset($_POST["login"])) {
                     include_once(__DIR__. "/../Sources/SecureSQL.php");
-                    include_once(__DIR__. "/../Sources/Errors.php");
 
                     $email = $secureSQL($_POST["email"]);
                     $isStudent = true;
@@ -58,7 +64,7 @@
             </form>
 
             <form action="Register.php" method="get">
-                <input type="submit" class="submit" value="Register"/>
+                <input type="submit" class="submit" value="Register">
             </form>
         </div>
     </body>

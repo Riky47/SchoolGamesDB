@@ -4,7 +4,7 @@
     <head>
         <script>
             var ogHtml
-            var form
+            var table
             var last
 
             function updateType() {
@@ -26,14 +26,14 @@
                     ?>
                     </select><td></tr>`
 
-                form.innerHTML = html + `<br><input type="submit" class="submit" name="register" value="Register">`
+                table.innerHTML = html
                 var select = document.getElementById("typeSwitch")
                 select.value = value
             }
             
             function load() {
-                form = document.getElementById("mainForm")
-                ogHtml = form.innerHTML
+                table = document.getElementById("mainTable")
+                ogHtml = table.innerHTML
                 
                 updateType()
             }
@@ -83,8 +83,8 @@
                 }
             ?>
 
-            <form method="post">
-                <table id="mainForm">
+            <form method="post" id="mainForm">
+                <table id="mainTable">
                     <tr><td class="field">Type:</td>
                     <td class="box"><select name="type" id="typeSwitch" onchange="updateType()" required>
                         <option value="student" selected>Student</option>
@@ -97,7 +97,9 @@
                     <tr><td class="field">EMail:</td> <td class="box"><input type="email" name="email" placeholder="mario.rossi@email.it" required></td></tr>
                     <tr><td class="field">Password:</td> <td class="box"><input type="password" name="password" placeholder="M****R****1!" required></td></tr>
                 </table>
-            </form><br>
+
+                <br><input type="submit" class="submit" name="register" value="Register">
+            </form>
 
             <form action="Login.php" method="get">
                 <input type="submit" class="submit" value="Sign-In"/>
