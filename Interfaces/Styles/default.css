@@ -20,7 +20,8 @@ body {
 	border-radius: 25px;
 	background-color: #483D8B;
 	cursor: pointer;
-	width: 80px
+	width: 80px;
+	margin: none;
 }
 .error{
 	color: #ff0000;
