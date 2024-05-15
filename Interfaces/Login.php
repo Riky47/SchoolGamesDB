@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<?php session_start(); ?>
 
 <html>
     <head>
@@ -18,24 +17,25 @@
                 include_once(__DIR__. "/../Sources/Errors.php");
 
                 if (isset($_POST["logout"])) {
-                    session_destroy();
+                    include_once(__DIR__. "/../Sources/User.php");
                     $error("You have been logged out!");
+                    $removeuser();
 
                 } elseif (isset($_POST["login"])) {
                     include_once(__DIR__. "/../Sources/SecureSQL.php");
 
                     $email = $secureSQL($_POST["email"]);
-                    $isStudent = true;
+                    $type = "student";
                     $missing = false;
 
                     $user = $conn->query("SELECT id, password FROM Students WHERE email = '". $email ."';");
                     if ($user->num_rows <= 0) {
                         $user = $conn->query("SELECT id, password FROM Teachers WHERE email = '". $email ."';");
-                        $isStudent = false;
+                        $type = "teacher";
                         
                         if ($user->num_rows <= 0) {
-                            $missing = true;
                             $error("Account not found!");
+                            $missing = true;
                         }
                     }
 
@@ -44,10 +44,11 @@
                         include_once(__DIR__. "/../Sources/Redirect.php");
 
                         if (password_verify($_POST["password"], $user["password"])) {
-                            $_SESSION["isStudent"] = $isStudent;
-                            $_SESSION["userId"] = $user["id"];
+                            include_once(__DIR__. "/../Sources/User.php");
+                            
+                            $setuser($user["id"], $type);
+                            $redirect($type == "student" ? "Student.php" : "Teacher.php");
 
-                            $redirect($isStudent ? "Student.php" : "Teacher.php");
                         } else
                             $error("Invalid credentials!");
                     }

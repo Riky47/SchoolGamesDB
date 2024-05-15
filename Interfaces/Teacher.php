@@ -1,10 +1,12 @@
 <?php
-session_start();
 include_once(__DIR__. "/../Sources/Redirect.php");
+include_once(__DIR__. "/../Sources/User.php");
 
-if (isset($_SESSION["isStudent"])) {
-    if ($_SESSION["isStudent"])
+$user = $getuser();
+if ($user) {
+    if ($user["type"] == "student")
         $redirect("Student.php");
+
 } else
     $redirect("Login.php");
 ?>
@@ -20,7 +22,7 @@ if (isset($_SESSION["isStudent"])) {
         <div id="space"></div>
 
         <div id="leaderDiv">
-            <h3>Login</h3>
+            <h3>Welcome back <?php echo $user["name"] ?> !</h3>
 
             
         </div>

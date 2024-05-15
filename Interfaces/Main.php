@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<?php session_start(); ?>
 
 <html>
     <head>
@@ -21,7 +20,7 @@
                     echo "<h3>Welcome back ". $user["name"] ."!</h3>";
                     echo "
                     <table><tr>
-                    <td class='field'><form action='". ($user["isStudent"] ? "Student.php" : "Teacher.php") ."' method='get'>
+                    <td class='field'><form action='". ($user["type"] == "student" ? "Student.php" : "Teacher.php") ."' method='get'>
                         <input type='submit' class='submit' value='Personal Area'/>
                     </form></td>
 
