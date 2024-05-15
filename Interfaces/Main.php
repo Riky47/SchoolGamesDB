@@ -11,41 +11,30 @@
         <h1>SchoolGamesDB</h1>
         <div id="space"></div>
 
-        <div id="leaderDiv">
+        <div id="leaderDiv"> 
             <?php
                 include_once(__DIR__. "/../Sources/User.php");
                 $user = $getuser();
-
-                if ($user) {
-                    echo "<h3>Welcome back ". $user["name"] ."!</h3>";
-                    echo "
-                    <table><tr>
-                    <td class='field'><form action='". ($user["type"] == "student" ? "Student.php" : "Teacher.php") ."' method='get'>
-                        <input type='submit' class='submit' value='Personal Area'/>
-                    </form></td>
-
-                    <td class='field'><form action='Login.php' method='post'>
-                        <input type='submit' class='submit' name='logout' value='Log-Out'/>
-                    </form></td>
-                    </tr></table>
-                    ";
-
-                } else
-                    echo "
-                    <h3>Welcome user!</h3>
-                    <p>The web database manager for school themed games!</p>
-    
-                    <table><tr>
-                    <td class='field'><form action='Login.php' method='get'>
-                        <input type='submit' class='submit' value='Sign-In'/>
-                    </form></td>
-            
-                    <td class='field'><form action='Register.php' method='get'>
-                        <input type='submit' class='submit' value='Register'/>
-                    </form></td>
-                    </tr></table>
-                    ";
             ?>
+
+            <h2>Welcome <?php echo ($user ? $user["name"] : "user"); ?>!</h2>
+            <p>The web database manager for school themed games!</p>
+
+            <h3>What we provide?</h3>
+            <p>Our system allows students to play subjects-themed games uploaded by teachers and earn coins!</p>
+
+            <h3>The project</h3>
+            <p>Our system, mainly built in Php and JavaScript, makes use of MySQL database to securily store data by protecting it from SQL Injection, passowrds are hashed with Argon2 before being stored and your connection is secured by a token session.</p>
+
+            <table><tr>
+                <td class="field"><form action="<?php echo ($user ? "Portal.php" : "Login.php"); ?>" method="get">
+                    <input type="submit" class="submit" value="<?php echo ($user ? "Portal" : "Sign-In"); ?>">
+                </form></td>
+                
+                <td class="field"><form action="<?php echo ($user ? "Login.php" : "Register.php"); ?>" method="post">
+                    <input type="submit" class="submit" name="logout" value="<?php echo ($user ? "Logout" : "Register"); ?>">
+                </form></td>
+            </tr></table>
         </div>
     </body>
 </html>

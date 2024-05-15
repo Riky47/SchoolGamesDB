@@ -1,3 +1,12 @@
+<?php
+include_once(__DIR__. "/../Sources/Redirect.php");
+include_once(__DIR__. "/../Sources/User.php");
+
+$user = $getuser();
+if ($user && !isset($_POST["logout"]))
+    $redirect("Portal.php");
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -15,9 +24,8 @@
 
             <?php
                 include_once(__DIR__. "/../Sources/Errors.php");
-
+                
                 if (isset($_POST["logout"])) {
-                    include_once(__DIR__. "/../Sources/User.php");
                     $error("You have been logged out!");
                     $removeuser();
 
@@ -41,13 +49,9 @@
 
                     if (!$missing) {
                         $user = $user->fetch_assoc();
-                        include_once(__DIR__. "/../Sources/Redirect.php");
-
                         if (password_verify($_POST["password"], $user["password"])) {
-                            include_once(__DIR__. "/../Sources/User.php");
-                            
                             $setuser($user["id"], $type);
-                            $redirect($type == "student" ? "Student.php" : "Teacher.php");
+                            $redirect("Portal.php");
 
                         } else
                             $error("Invalid credentials!");

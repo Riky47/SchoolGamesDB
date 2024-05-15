@@ -16,15 +16,12 @@
                 last = value
 
                 if (value == "student")
-                    html += `<tr><td class="field">Class:</td> <td class="box"><select class="class" name="class" required>
+                    html += `<tr><td class="field">Class:</td> <td class="box">
                     <?php
-                        include_once(__DIR__. "/../Sources/Connect.php");
-
-                        $result = $conn->query("SELECT tag FROM Classes ORDER BY tag ASC");
-                        while ($row = $result->fetch_assoc())
-                            echo "<option class='option' value=". $row["tag"] .">". $row["tag"] ."</option>";
+                        include_once(__DIR__. "/../Sources/Classes.php");
+                        $classselector();
                     ?>
-                    </select><td></tr>`
+                    <td></tr>`
 
                 table.innerHTML = html
                 var select = document.getElementById("typeSwitch")
@@ -71,8 +68,8 @@
                             $secureSQL($_POST["surname"])   ."', '". 
                             $secureSQL($_POST["username"])  ."', '".
                             $secureSQL($_POST["email"])     ."', '". 
-                            password_hash($_POST["password"], PASSWORD_ARGON2I)  .($isStudents ? ("', ". 
-                            "(SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."')") : "").");"
+                            password_hash($_POST["password"], PASSWORD_ARGON2I) ."'".
+                            ($isStudents ? (", (SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."')") : "") .");"
                         );
 
                         if ($result)
