@@ -12,22 +12,40 @@ if(!$user)
         <script>
             var loaded = false
             function updateGames() {
-                const value = document.getElementById("argumentSelector").value
-                const input = document.getElementById("argumentInput")
-                const form = document.getElementById("updateForm")
-
-                input.value = value
+                document.getElementById("argumentInput").value = document.getElementById("argumentSelector").value
                 if (loaded)
-                    form.submit()
+                    document.getElementById("updateForm").submit()
 
                 loaded = true
             }
 
-            window.onload = updateGames
+            function previewGame(id, title, desc, coins) {
+                document.getElementById("gameReward").innerHTML = "Reward: " + coins
+                document.getElementById("gameDescription").innerHTML = desc
+                document.getElementById("gameTitle").innerHTML = title
+                document.getElementById("playInput").value = id
+            }
+
+            function playGame() {
+                document.getElementById("playForm").submit()
+            }
+
+            function load() {
+                updateGames()
+                const btn = document.getElementById("firstGame")
+                if (btn)
+                    btn.click()
+            }
+
+            window.onload = load
         </script>
 
         <form id="updateForm" method="post">
             <input id="argumentInput" type="hidden" name="argument">
+        </form>
+
+        <form id="playForm" action="Player.php" method="post">
+            <input id="playInput" type="hidden" name="play">
         </form>
 
         <title>SchoolGamesDB</title>
@@ -47,6 +65,7 @@ if(!$user)
                 $arg = "";
                 if (isset($_POST["argument"]))
                     $arg = $_POST["argument"];
+
                 else {
                     $result = $conn->query("SELECT id FROM Arguments ORDER BY tag LIMIT 1");
                     if ($result->num_rows > 0)
@@ -56,22 +75,41 @@ if(!$user)
 
             <select id="argumentSelector" onchange="updateGames()">
                 <?php $argumentselector($arg); ?>
-            </select>
+            </select><br><br>
 
             <div class="scrollable">
+                <h2>Games</h2>
+
                 <?php
                     if ($arg != "") {
-                        $games = $conn->query("SELECT * FROM Games WHERE argument = $arg");
-                        if ($games->num_rows > 0)
-                            while ($row = $games->fetch_assoc())
-                                echo "<button onclick=previewGame('". $row["id"]. ", ". $row["name"] .", ". $row["description"]. ", ". $row["coins"] ."')>". $row["name"] ."</button>";
-                        else
+                        include_once(__DIR__. "/../Sources/SecureSQL.php");
+                        $games = $conn->query("SELECT * FROM Games WHERE argument = ". $secureSQL($arg));
+
+                        if ($games->num_rows > 0) {
+                            $first = true;
+                            while ($row = $games->fetch_assoc()) {
+                                $params = "previewGame('". $row["id"] ."', '". $row["title"] ."', '". $row["description"]. "', '". $row["coins"] ."')";
+                                echo "<button ". ($first ? "id='firstGame'" : "") ." onclick=\"" .$params. "\">". $row["title"] ."</button><br>";
+                                $first = false;
+                            }
+
+                        } else
                             $error("No games found!");
 
                     } else
                         $error("No argument found!");
                 ?>
-            </div>
+            </div><br>
+
+            <div class="scrollable">
+                <h2>Info</h2>
+
+                <h3 id="gameTitle">Title</h3>
+                <p id="gameDescription">Description</p>
+                <p id="gameReward">Reward: 0</p>
+                
+                <button onclick="playGame()">Play</button>
+            </div><br>
 
             <form action="Portal.php" method="get">
                 <input type="submit" class="submit" value="Back">

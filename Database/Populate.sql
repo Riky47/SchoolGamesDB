@@ -4,3 +4,7 @@ INSERT INTO Classes(tag) VALUES
 
 INSERT INTO Arguments(tag) VALUES
 ("Leopardi"), ("Ungaretti");
+
+INSERT INTO Games(title, description, argument, coins) VALUES
+("Vita", "Vita di leopardi", 1, 10), ("Poetica", "Poetica di ungaretti", 2, 10),
+("Poetica", "Poetica di leopardi", 1, 15), ("Vita", "Vita di ungaretti", 2, 15);
