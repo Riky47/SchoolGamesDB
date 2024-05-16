@@ -35,7 +35,7 @@ if(!$user)
 
                     <?php
                         if ($user["type"] == "student") {
-                            include_once(__DIR__. "/../Sources/Classes.php");
+                            include_once(__DIR__. "/../Sources/Selectors.php");
                             echo "<tr><td class='field'>Class:</td> <td class='box'>";
                             $classselector();
                             echo"<td></tr>";

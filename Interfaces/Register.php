@@ -16,15 +16,15 @@
                 last = value
 
                 if (value == "student")
-                    html += `<tr><td class="field">Class:</td> <td class="box">
+                    html += `<tr><td class="field">Class:</td> <td class="box"><select class='class' name='class' required>
                     <?php
-                        include_once(__DIR__. "/../Sources/Classes.php");
+                        include_once(__DIR__. "/../Sources/Selectors.php");
                         $classselector();
                     ?>
-                    <td></tr>`
+                    </select><td></tr>`
 
                 table.innerHTML = html
-                var select = document.getElementById("typeSwitch")
+                const select = document.getElementById("typeSwitch")
                 select.value = value
             }
             
@@ -69,7 +69,7 @@
                             $secureSQL($_POST["username"])  ."', '".
                             $secureSQL($_POST["email"])     ."', '". 
                             password_hash($_POST["password"], PASSWORD_ARGON2I) ."'".
-                            ($isStudents ? (", (SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."')") : "") .");"
+                            ($isStudents ? (", ". $secureSQL($_POST["class"])) : "") .");" //(", (SELECT id FROM Classes WHERE tag = '". $secureSQL($_POST["class"]) ."')") : "") .");"
                         );
 
                         if ($result)
