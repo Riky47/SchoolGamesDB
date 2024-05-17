@@ -1,4 +1,6 @@
 -- Active: 1715887640611@@127.0.0.1@3306
+DROP DATABASE SchoolGamesDB;
+
 CREATE DATABASE IF NOT EXISTS SchoolGamesDB;
 
 USE SchoolGamesDB;
@@ -21,6 +23,8 @@ CREATE TABLE IF NOT EXISTS Students (
     --
     PRIMARY KEY (id),
     FOREIGN KEY (class) REFERENCES Classes(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Teachers (
@@ -42,6 +46,8 @@ CREATE TABLE IF NOT EXISTS VirtualClasses (
     --
     PRIMARY KEY (id),
     FOREIGN KEY (teacher) REFERENCES Teachers(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Arguments (
@@ -60,6 +66,8 @@ CREATE TABLE IF NOT EXISTS Games (
     --
     PRIMARY KEY(id),
     FOREIGN KEY(argument) REFERENCES Arguments(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS LinksUsers (
@@ -68,8 +76,13 @@ CREATE TABLE IF NOT EXISTS LinksUsers (
     student INT NOT NULL,
     --
     PRIMARY KEY (id),
-    FOREIGN KEY (student) REFERENCES Students(id),
+    FOREIGN KEY (student) REFERENCES Students(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    --
     FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS LinksGames (
@@ -78,8 +91,13 @@ CREATE TABLE IF NOT EXISTS LinksGames (
     game INT NOT NULL,
     --
     PRIMARY KEY (id),
-    FOREIGN KEY (game) REFERENCES Games(id),
+    FOREIGN KEY (game) REFERENCES Games(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    --
     FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Rewards (
@@ -89,6 +107,11 @@ CREATE TABLE IF NOT EXISTS Rewards (
     game INT NOT NULL,
     --
     PRIMARY KEY (id),
-    FOREIGN KEY (game) REFERENCES Games(id),
+    FOREIGN KEY (game) REFERENCES Games(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    --
     FOREIGN KEY (student) REFERENCES Students(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );

@@ -1,4 +1,4 @@
--- Active: 1712133423498@@127.0.0.1@3306@schoolgamesdb
+-- Active: 1715887640611@@127.0.0.1@3306@schoolgamesdb
 INSERT INTO Classes(tag) VALUES
 ("5AI"), ("1C");
 
@@ -10,7 +10,7 @@ INSERT INTO Games(title, description, argument, coins) VALUES
 ("Poetica", "Poetica di leopardi", 1, 15), ("Vita", "Vita di ungaretti", 2, 15);
 
 INSERT INTO VirtualClasses(tag, subject, teacher) VALUES
-("Class 1", "Italiano", 1);
+("Class 1", "Italiano", 1), ("Class 2", "Matematica", 1);
 
 INSERT INTO LinksGames(virtualClass, game) VALUES
-(1, 1), (1, 3);
+(1, 1), (2, 3);

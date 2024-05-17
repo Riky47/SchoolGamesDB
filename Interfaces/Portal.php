@@ -18,7 +18,7 @@ if(!$user)
         <div id="space"></div>
 
         <div id="leaderDiv">
-            <h3>Welcome back <?php echo $user["name"]; ?>!</h3>
+            <h3>Welcome back <?php echo $user["username"]; ?>!</h3>
 
             <form action="Games.php" method="get">
                 <input type="submit" class="submit" value="Games">

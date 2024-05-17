@@ -17,7 +17,7 @@
                 $user = $getuser();
             ?>
 
-            <h2>Welcome <?php echo ($user ? $user["name"] : "user"); ?>!</h2>
+            <h2>Welcome <?php echo ($user ? $user["username"] : "user"); ?>!</h2>
             <p>The web database manager for school themed games!</p>
 
             <h3>What we provide?</h3>
