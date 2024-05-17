@@ -13,7 +13,11 @@
     $getuser = function() use ($conn) {
         if (isset($_SESSION["userType"])) {
             $isStudent = $_SESSION["userType"] == "student";
-            $user = $conn->query("SELECT * FROM ". ($isStudent ? "Students" : "Teachers") ." WHERE id = ". $_SESSION["userId"]);
+            $user = $conn->query("
+                SELECT * 
+                FROM ". ($isStudent ? "Students" : "Teachers") ." 
+                WHERE id = ". $_SESSION["userId"]
+            );
 
             if ($user->num_rows > 0) {
                 $assoc = $user->fetch_assoc();

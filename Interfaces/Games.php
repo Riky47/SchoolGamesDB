@@ -57,7 +57,7 @@ if(!$user)
         <div id="space"></div>
 
         <div id="leaderDiv">
-            <h3>Login</h3>
+            <h3>Games</h3>
             <?php
                 include_once(__DIR__. "/../Sources/Selectors.php");
                 include_once(__DIR__. "/../Sources/Errors.php");
@@ -67,7 +67,13 @@ if(!$user)
                     $arg = $_POST["argument"];
 
                 else {
-                    $result = $conn->query("SELECT id FROM Arguments ORDER BY tag LIMIT 1");
+                    $result = $conn->query("
+                        SELECT id 
+                        FROM Arguments 
+                        ORDER BY tag ASC 
+                        LIMIT 1
+                    ");
+
                     if ($result->num_rows > 0)
                         $arg = $result->fetch_assoc()["id"];
                 }
@@ -83,7 +89,12 @@ if(!$user)
                 <?php
                     if ($arg != "") {
                         include_once(__DIR__. "/../Sources/SecureSQL.php");
-                        $games = $conn->query("SELECT * FROM Games WHERE argument = ". $secureSQL($arg));
+                        $games = $conn->query("
+                            SELECT * FROM 
+                            Games 
+                            WHERE argument = ". $secureSQL($arg) ." 
+                            ORDER BY title ASC
+                        ");
 
                         if ($games->num_rows > 0) {
                             $first = true;

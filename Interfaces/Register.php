@@ -55,8 +55,17 @@
                     include_once(__DIR__. "/../Sources/Redirect.php");
                     include_once(__DIR__. "/../Sources/Errors.php");
                     
-                    $student = $conn->query("SELECT * FROM Students WHERE email = '". $secureSQL($_POST["email"]) ."' OR username = '". $secureSQL($_POST["username"]) ."';");
-                    $teacher = $conn->query("SELECT * FROM Teachers WHERE email = '". $secureSQL($_POST["email"]) ."' OR username = '". $secureSQL($_POST["username"]) ."';");
+                    $student = $conn->query("
+                        SELECT * 
+                        FROM Students 
+                        WHERE email = '". $secureSQL($_POST["email"]) ."' OR username = '". $secureSQL($_POST["username"]) ."'
+                    ");
+
+                    $teacher = $conn->query("
+                        SELECT * 
+                        FROM Teachers 
+                        WHERE email = '". $secureSQL($_POST["email"]) ."' OR username = '". $secureSQL($_POST["username"]) ."'
+                    ");
                     
                     if ($student->num_rows > 0 || $teacher->num_rows > 0)
                         $error("Credentials already in use!");

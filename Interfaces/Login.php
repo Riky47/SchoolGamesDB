@@ -36,11 +36,20 @@ if ($user && !isset($_POST["logout"]))
                     $type = "student";
                     $missing = false;
 
-                    $user = $conn->query("SELECT id, password FROM Students WHERE email = '". $email ."';");
+                    $user = $conn->query("
+                        SELECT id, password 
+                        FROM Students 
+                        WHERE email = '". $email ."'
+                    ");
+
                     if ($user->num_rows <= 0) {
-                        $user = $conn->query("SELECT id, password FROM Teachers WHERE email = '". $email ."';");
+                        $user = $conn->query("
+                            SELECT id, password 
+                            FROM Teachers 
+                            WHERE email = '". $email ."'
+                        ");
+
                         $type = "teacher";
-                        
                         if ($user->num_rows <= 0) {
                             $error("Account not found!");
                             $missing = true;
