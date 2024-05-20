@@ -41,17 +41,57 @@ elseif ($user["type"] == "student")
             <h3>Games</h3>
             <?php
                 include_once(__DIR__. "/../Sources/Selectors.php");
+                include_once(__DIR__. "/../Sources/SecureSQL.php");
                 include_once(__DIR__. "/../Sources/Errors.php");
 
                 $game = "";
                 if (isset($_POST["game"])) {
-                    $game = $_POST["game"];
+                    $game = (int) $secureSQL($_POST["game"]);
                     
-                    if (isset($_POST["removeGame"])) {
+                    if (isset($_POST["updateGame"])) {
+                        $succ = $conn->query("
+                            UPDATE Games 
+                            SET 
+                                title = '". $secureSQL($_POST["title"]) ."', 
+                                description = '". $secureSQL($_POST["description"]) ."', 
+                                argument = ". (int) $secureSQL($_POST["argument"]) .", 
+                                coins = ". $secureSQL($_POST["reward"]) ." 
+                            WHERE id = ". $game
+                        );
+                        
+                        if (!$succ)
+                            $error("Unable to make changes to the game!");
+
+                        $classes = [];
+                        if (isset($_POST["classes"]))
+                            foreach ($_POST["classes"] as $class)
+                                array_push($classes, $secureSQL($class));
+    
+                        $succ = $conn->query("
+                            DELETE FROM LinksGames 
+                            WHERE game = ". $game .(count($classes) > 0 ? (" AND virtualClass NOT IN (". implode(',', $classes) .")") : "")
+                        );
+
+                        if (!$succ)
+                            $error("Unable to remove classes!");
+
+                        if (count($classes) > 0) {
+                            $addQuery = "INSERT IGNORE INTO LinksGames(game, virtualClass) VALUES ";
+                            foreach ($classes as $class)
+                                $addQuery .= " (". $game .", ". (int) $class ."),";
+
+                            $addQuery = substr_replace($addQuery, '', -1);
+                            $succ = $conn->query($addQuery);
+
+                            if (!$succ)
+                                $error("Unable to add classes!");
+                        }
+
+                    } elseif (isset($_POST["removeGame"])) {
                         $succ = $conn->query("
                             DELETE FROM Games
-                            WHERE id = ". $game ."
-                        ");
+                            WHERE id = ". $game
+                        );
                         
                         if (!$succ)
                             $error("Unable to delete the game!");
@@ -84,21 +124,20 @@ elseif ($user["type"] == "student")
                     $info = [
                         "description" => "",
                         "title" => "",
-                        "coins" => "",
-                        "argId" => "",
+                        "coins" => 0,
+                        "argId" => 0,
                         "uses" => 0,
-                        "id" => ""
+                        "id" => 0
                     ];
 
                     if ($game != "") {
-                        include_once(__DIR__. "/../Sources/SecureSQL.php");
                         $result = $conn->query("
                             SELECT g.*, a.id AS argId, COUNT(v.id) AS uses 
                             FROM Games g 
                             JOIN Arguments a ON g.argument = a.id 
-                            JOIN LinksGames l ON g.id = l.game 
-                            JOIN VirtualClasses v ON v.id = l.virtualClass 
-                            WHERE g.id = ". $secureSQL($game) ."
+                            LEFT JOIN LinksGames l ON g.id = l.game 
+                            LEFT JOIN VirtualClasses v ON v.id = l.virtualClass 
+                            WHERE g.id = ". $game ."
                             GROUP BY g.id, a.tag 
                             ORDER BY g.title ASC 
                             LIMIT 1
@@ -119,15 +158,15 @@ elseif ($user["type"] == "student")
                         echo "es";
                 ?></h3>
 
-                <select>
-                    <?php $argumentselector($info["argId"]); ?>
-                </select>
-
                 <form method="post">
-                    <input type="hidden" name="game" value="<?php echo $info["id"]; ?>" required>
-                    <input type="textbox" name="title" value="<?php echo $info["title"]; ?>" required>
-                    <input type="textfield" name="description" value="<?php echo $info["description"]; ?>" required>
-                    <input type="textbox" name="reward" value="<?php echo $info["coins"]; ?>" required>
+                    <select name="argument" required>
+                        <?php $argumentselector($info["argId"]); ?>
+                    </select><br>
+
+                    <input type="hidden" name="game" value="<?php echo $info["id"]; ?>" required><br>
+                    <input type="textbox" name="title" value="<?php echo $info["title"]; ?>" required><br>
+                    <input type="textfield" name="description" value="<?php echo $info["description"]; ?>" required><br>
+                    <input type="number" name="reward" value="<?php echo $info["coins"]; ?>" required><br>
                     
                     <h2>Virtual classes</h2>
                     <div class="scrollable">
@@ -139,7 +178,7 @@ elseif ($user["type"] == "student")
                                     FROM VirtualClasses v 
                                     JOIN LinksGames l ON v.id = l.virtualClass 
                                     JOIN Games g ON l.game = g.id 
-                                    WHERE g.id = ". $secureSQL($game) ." 
+                                    WHERE g.id = ". $game ." 
                                     GROUP BY v.id 
                                     ORDER BY v.tag ASC
                                 ");
@@ -147,21 +186,20 @@ elseif ($user["type"] == "student")
                                 $blacklist = [];
                                 if ($classes->num_rows > 0)
                                     while($row = $classes->fetch_assoc()) {
-                                        echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='classes[]' type='checkbox' checked></td></tr>";
+                                        echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='classes[]' type='checkbox' value='". $row["id"] ."' checked></td></tr>";
                                         array_push($blacklist, $row["id"]);
                                     }
 
-                                $blacklist = empty($blacklist) ? "NULL" : implode(',', $blacklist);
                                 $classes = $conn->query("
                                     SELECT id, tag 
-                                    FROM VirtualClasses 
-                                    WHERE id NOT IN ($blacklist) 
-                                    ORDER BY tag ASC
+                                    FROM VirtualClasses ".
+                                    (count($blacklist) > 0 ? "WHERE id NOT IN (". implode(',', $blacklist) .") " : "").
+                                    "ORDER BY tag ASC
                                 ");
 
                                 if ($classes->num_rows > 0)
                                     while($row = $classes->fetch_assoc())
-                                        echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='classes[]' type='checkbox'></td></tr>";
+                                        echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='classes[]' type='checkbox' value='". $row["id"] ."'></td></tr>";
                             }
                         ?>
                         </table>

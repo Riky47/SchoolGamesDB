@@ -1,4 +1,4 @@
--- Active: 1715887640611@@127.0.0.1@3306
+-- Active: 1712133423498@@127.0.0.1@3306@schoolgamesdb
 DROP DATABASE SchoolGamesDB;
 
 CREATE DATABASE IF NOT EXISTS SchoolGamesDB;
@@ -82,7 +82,9 @@ CREATE TABLE IF NOT EXISTS LinksUsers (
     --
     FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    --
+    UNIQUE (student, virtualClass)
 );
 
 CREATE TABLE IF NOT EXISTS LinksGames (
@@ -97,7 +99,9 @@ CREATE TABLE IF NOT EXISTS LinksGames (
     --
     FOREIGN KEY (virtualClass) REFERENCES VirtualClasses(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    --
+    UNIQUE (game, virtualClass)
 );
 
 CREATE TABLE IF NOT EXISTS Rewards (
@@ -113,5 +117,7 @@ CREATE TABLE IF NOT EXISTS Rewards (
     --
     FOREIGN KEY (student) REFERENCES Students(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    --
+    UNIQUE (game, student)
 );
