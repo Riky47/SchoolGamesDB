@@ -8,6 +8,15 @@ if(!$user)
 
 elseif ($user["type"] == "student")
     $redirect("Portal.php");
+
+$res = $conn->query("
+    SELECT COUNT(id) AS count
+    FROM Arguments
+    GROUP BY id
+");
+
+if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
+    $redirect("Arguments.php");
 ?>
 
 <html>
@@ -99,6 +108,16 @@ elseif ($user["type"] == "student")
                         $game = $succ ? "" : $game;
                     }
                 } 
+
+                if (isset($_POST["addGame"])) {
+                    $succ = $conn->query("
+                        INSERT INTO Games(title, description, argument, coins) 
+                        VALUES ('New game', 'So cool!', 1, 0)
+                    ");
+
+                    if ($succ)
+                        $game = $conn->insert_id;
+                }
                 
                 if ($game == "") {
                     $result = $conn->query("
@@ -115,7 +134,11 @@ elseif ($user["type"] == "student")
 
             <select id="gameSelector" onchange="updateInfos()">
                 <?php $gamesselector($game); ?>
-            </select><br><br>
+            </select>
+
+            <form method="post">
+                <input type="submit" name="addGame" value="+">
+            </form>
 
             <div class="scrollable">
                 <h2>Games</h2>
@@ -159,14 +182,17 @@ elseif ($user["type"] == "student")
                 ?></h3>
 
                 <form method="post">
-                    <select name="argument" required>
-                        <?php $argumentselector($info["argId"]); ?>
-                    </select><br>
+                    <td class="box"><input type="hidden" name="game" value="<?php echo $info["id"]; ?>" required>
 
-                    <input type="hidden" name="game" value="<?php echo $info["id"]; ?>" required><br>
-                    <input type="textbox" name="title" value="<?php echo $info["title"]; ?>" required><br>
-                    <input type="textfield" name="description" value="<?php echo $info["description"]; ?>" required><br>
-                    <input type="number" name="reward" value="<?php echo $info["coins"]; ?>" required><br>
+                    <table>
+                        <tr><td class="field">Argument:</td> <td class="box"><select name="argument" required>
+                            <?php $argumentselector($info["argId"]); ?>
+                        </select></td></tr>
+
+                        <tr><td class="field">Title:</td> <td class="box"><input type="textbox" name="title" value="<?php echo $info["title"]; ?>" required></td></tr>
+                        <tr><td class="field">Description:</td> <td class="box"><input type="textfield" name="description" value="<?php echo $info["description"]; ?>" required></td></tr>
+                        <tr><td class="field">Reward:</td> <td class="box"><input type="number" name="reward" value="<?php echo $info["coins"]; ?>" required></td></tr>
+                    </table>
                     
                     <h2>Virtual classes</h2>
                     <div class="scrollable">
@@ -206,6 +232,10 @@ elseif ($user["type"] == "student")
                     </div><br>
 
                     <input type="submit" name="updateGame" value="Save">
+                </form>
+
+                <form method="post">
+                    <td class="box"><input type="hidden" name="game" value="<?php echo $info["id"]; ?>" required>
                     <input type="submit" name="removeGame" value="Remove">
                 </form>
             </div><br>
