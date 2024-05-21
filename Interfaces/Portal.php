@@ -31,6 +31,10 @@ if(!$user)
                         <input type='submit' class='submit' value='Manage games'>
                     </form>
 
+                    <form action='Arguments.php' method='get'>
+                        <input type='submit' class='submit' value='Manage arguments'>
+                    </form>
+
                     <form action='Classes.php' method='get'>
                         <input type='submit' class='submit' value='Manage classes'>
                     </form>
