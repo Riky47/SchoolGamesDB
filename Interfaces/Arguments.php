@@ -47,34 +47,7 @@ elseif ($user["type"] == "student")
                 $argument = "";
                 $tag = "";
 
-                if (isset($_POST["argument"])) {
-                    $argument = $secureSQL($_POST["argument"]);
-                    $info = $conn->query("
-                        SELECT tag 
-                        FROM Arguments 
-                        WHERE id = ". $argument ." 
-                        LIMIT 1
-                    ");
-
-                    if ($info->num_rows > 0)
-                        $tag = $info->fetch_assoc()["tag"];
-                    else
-                        $error("Unable to find the selected argument!");
-
-                    if (isset($_POST["save"])) {
-                        $tag = $secureSQL($_POST["tag"]);
-                        $res = $conn->query("
-                            UPDATE Arguments 
-                            SET 
-                                tag = '". $tag ."' 
-                            WHERE id = ". $argument
-                        );
-
-                        if (!$res)
-                            $error("Unable to save changes to the argument!");
-                    }
-
-                } else {
+                $getFirstArgument = function() use($conn, $error, $argument, $tag) {
                     $info = $conn->query("
                         SELECT * 
                         FROM Arguments 
@@ -87,7 +60,53 @@ elseif ($user["type"] == "student")
                         $argument = $assoc["id"];
                         $tag = $assoc["tag"];
                     }
-                }
+                };
+
+                if (isset($_POST["argument"])) {
+                    $argument = $secureSQL($_POST["argument"]);
+
+                    if (isset($_POST["tag"]))
+                        $tag = $secureSQL($_POST["tag"]);
+
+                    else {
+                        $info = $conn->query("
+                            SELECT tag 
+                            FROM Arguments 
+                            WHERE id = ". $argument ." 
+                            LIMIT 1
+                        ");
+
+                        if ($info->num_rows > 0)
+                            $tag = $info->fetch_assoc()["tag"];
+                        else
+                            $error("Unable to find the selected argument!");
+                    }
+
+                    if (isset($_POST["save"])) {
+                        $res = $conn->query("
+                            UPDATE Arguments 
+                            SET 
+                                tag = '". $tag ."' 
+                            WHERE id = ". $argument
+                        );
+
+                        if (!$res)
+                            $error("Unable to save changes to the argument!");
+
+                    } elseif (isset($_POST["delete"])) {
+                        $res = $conn->query("
+                            DELETE FROM Arguments 
+                            WHERE id = ". $argument
+                        );
+
+                        if ($res)
+                            $getFirstArgument();
+                        else
+                            $error("Unable to delete the selected argument!");
+                    }
+
+                } else
+                    $getFirstArgument();
             ?>
             
             <select id="argumentSelector" onchange="updateInfos()">
