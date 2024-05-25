@@ -55,11 +55,26 @@ elseif ($user["type"] == "student")
                         LIMIT 1
                     ");
 
-                    if ($info->num_rows > 0) {
-                        $assoc = $info->fetch_assoc();
-                        $argument = $assoc["id"];
-                        $tag = $assoc["tag"];
+                    if ($info->num_rows > 0)
+                        return $info->fetch_assoc();
+                    
+                    return false;
+                };
+
+                $checkPresence = function($tag) use($conn, $error) {
+                    $res = $conn->query("
+                        SELECT * 
+                        FROM Arguments 
+                        WHERE tag = '". $tag ."' 
+                        LIMIT 1
+                    ");
+
+                    if ($res->num_rows > 0) {
+                        $error("Title already in use!");
+                        return true;
                     }
+
+                    return false;
                 };
 
                 if (isset($_POST["argument"])) {
@@ -83,15 +98,17 @@ elseif ($user["type"] == "student")
                     }
 
                     if (isset($_POST["save"])) {
-                        $res = $conn->query("
-                            UPDATE Arguments 
-                            SET 
-                                tag = '". $tag ."' 
-                            WHERE id = ". $argument
-                        );
+                        if (!$checkPresence($tag)) {
+                            $res = $conn->query("
+                                UPDATE Arguments 
+                                SET 
+                                    tag = '". $tag ."' 
+                                WHERE id = ". $argument
+                            );
 
-                        if (!$res)
-                            $error("Unable to save changes to the argument!");
+                            if (!$res)
+                                $error("Unable to save changes to the argument!");
+                        }
 
                     } elseif (isset($_POST["delete"])) {
                         $res = $conn->query("
@@ -99,14 +116,37 @@ elseif ($user["type"] == "student")
                             WHERE id = ". $argument
                         );
 
-                        if ($res)
-                            $getFirstArgument();
-                        else
+                        if ($res) {
+                            $info = $getFirstArgument();
+                            if ($info) {
+                                $argument = $info["id"];
+                                $tag = $info["tag"];
+                            }
+
+                        } else
                             $error("Unable to delete the selected argument!");
+
+                    } elseif (isset($_POST["new"])) {
+                        if (!$checkPresence($tag)) {
+                            $res = $conn->query("
+                                INSERT INTO Arguments(tag) 
+                                VALUES ('". $tag ."')
+                            ");
+
+                            if ($res)
+                                $argument = $conn->insert_id;
+                            else
+                                $error("Unable to create a new argument!");
+                        }
                     }
 
-                } else
-                    $getFirstArgument();
+                } else {
+                    $info = $getFirstArgument();
+                    if ($info) {
+                        $argument = $info["id"];
+                        $tag = $info["tag"];
+                    }
+                }
             ?>
             
             <select id="argumentSelector" onchange="updateInfos()">
@@ -124,11 +164,8 @@ elseif ($user["type"] == "student")
                 </table>
 
                 <br><input type="submit" class="submit" name="save" value="Save">
+                <br><input type="submit" class="submit" name="new" value="New">
                 <br><input type="submit" class="submit" name="delete" value="Delete">
-            </form>
-
-            <form method="post">
-                <input type="submit" class="submit" name="new" value="New"/>
             </form>
 
             <form action="Portal.php" method="get">
