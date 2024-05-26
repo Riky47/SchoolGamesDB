@@ -90,8 +90,8 @@ if(!$user)
                     if ($arg != "") {
                         include_once(__DIR__. "/../Sources/SecureSQL.php");
                         $games = $conn->query("
-                            SELECT * FROM 
-                            Games 
+                            SELECT * 
+                            FROM Games 
                             WHERE argument = ". $secureSQL($arg) ." 
                             ORDER BY title ASC
                         ");

@@ -112,7 +112,12 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                 if (isset($_POST["addGame"])) {
                     $succ = $conn->query("
                         INSERT INTO Games(title, description, argument, coins) 
-                        VALUES ('New game', 'So cool!', 1, 0)
+                        VALUES ('New game', 'So cool!', (
+                            SELECT id 
+                            FROM Arguments 
+                            ORDER BY tag ASC 
+                            LIMIT 1
+                        ), 0)
                     ");
 
                     if ($succ)

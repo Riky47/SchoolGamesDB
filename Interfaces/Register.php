@@ -19,7 +19,7 @@
                     html += `<tr><td class="field">Class:</td> <td class="box"><select class='class' name='class' required>
                     <?php
                         include_once(__DIR__. "/../Sources/Selectors.php");
-                        $classselector();
+                        $classselector("");
                     ?>
                     </select><td></tr>`
 
