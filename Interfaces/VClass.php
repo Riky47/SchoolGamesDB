@@ -81,7 +81,7 @@ elseif ($user["type"] == "student")
 
                 $getOtherInfos = function($class) use($conn, $error) {
                     $info = $conn->query("
-                        SELECT t.username, v.subject 
+                        SELECT t.name, t.surname, t.username, v.subject 
                         FROM VirtualClasses v 
                         JOIN Teachers t ON v.teacher = t.id 
                         WHERE v.id = ". $class ." 
@@ -145,9 +145,14 @@ elseif ($user["type"] == "student")
                             $info = $getFirstclass();
                             if ($info) {
                                 $subject = $info["subject"];
-                                $teacher = $info["teacher"];
                                 $class = $info["id"];
                                 $tag = $info["tag"];
+
+                                $oinfo = $getOtherInfos($class);
+                                if($oinfo) {
+                                    $teacher = $oinfo["surname"] ." ". $oinfo["name"] ." - ". $oinfo["username"];
+                                    $subject = $oinfo["subject"];
+                                }
                             }
 
                         } else
@@ -170,7 +175,7 @@ elseif ($user["type"] == "student")
                     if ($teacher == "" || $subject == "") {
                         $oinfo = $getOtherInfos($class);
                         if($oinfo) {
-                            $teacher = $oinfo["username"];
+                            $teacher = $oinfo["surname"] ." ". $oinfo["name"] ." - ". $oinfo["username"];
                             $subject = $oinfo["subject"];
                         }
                     }
@@ -184,7 +189,7 @@ elseif ($user["type"] == "student")
 
                         $oinfo = $getOtherInfos($class);
                         if($oinfo) {
-                            $teacher = $oinfo["username"];
+                            $teacher = $oinfo["surname"] ." ". $oinfo["name"] ." - ". $oinfo["username"];
                             $subject = $oinfo["subject"];
                         }
                     }

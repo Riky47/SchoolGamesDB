@@ -34,21 +34,20 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
             var loaded = false
             function updateClass() {
                 document.getElementById("classInput").value = document.getElementById("classSelector").value
+                document.getElementById("vclassInput").value = document.getElementById("vclassSelector").value
+
                 if (loaded)
                     document.getElementById("classForm").submit()
 
                 loaded = true
             }
 
-            function load() {
-                updateClass();
-            }
-
-            window.onload = load
+            window.onload = updateClass
         </script>
 
         <form id="classForm" method="post">
             <input id="classInput" type="hidden" name="class">
+            <input id="vclassInput" type="hidden" name="vclass">
         </form>
 
         <title>SchoolGamesDB</title>
@@ -65,13 +64,101 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
             <?php
                 include_once(__DIR__. "/../Sources/SecureSQL.php");
                 include_once(__DIR__. "/../Sources/Selectors.php");
+
                 $class = "";
+                $tag = "";
+
+                $vclass = "";
+                $vtag = "";
 
                 if (isset($_POST["class"]))
-                    $class = $sercureSQL($_POST["class"]);
+                    $class = $secureSQL($_POST["class"]);
                 
                 else {
-                    
+                    $info = $conn->query("
+                        SELECT * 
+                        FROM Classes 
+                        ORDER BY tag ASC 
+                        LIMIT 1
+                    ");
+
+                    if ($info->num_rows > 0) {
+                        $assoc = $info->fetch_assoc();
+                        $class = $assoc["id"];
+                        $tag = $assoc["tag"];
+                    }
+                }
+
+                if (isset($_POST["vclass"]))
+                    $vclass = $secureSQL($_POST["vclass"]);
+                
+                else {
+                    $info = $conn->query("
+                        SELECT * 
+                        FROM VirtualClasses 
+                        ORDER BY tag ASC 
+                        LIMIT 1
+                    ");
+
+                    if ($info->num_rows > 0) {
+                        $assoc = $info->fetch_assoc();
+                        $vclass = $assoc["id"];
+                        $vtag = $assoc["tag"];
+                    }
+                }
+
+                if (isset($_POST["add"])) {
+                    $students = [];
+                    if (isset($_POST["students"]))
+                        foreach ($_POST["students"] as $student)
+                            array_push($students, $secureSQL($student));
+
+                    if (count($students) > 0) {
+                        $query = "INSERT IGNORE INTO LinksUsers(student, virtualClass) VALUES";
+                        foreach ($students as $student)
+                            $query .= " (". $student .", ". $vclass ."),";
+
+                        $query = substr_replace($query, '', -1);
+                        $succ = $conn->query($query);
+
+                        if (!$succ)
+                            $error("Unable to add the student/s to the selected virtual class!");
+                    }
+
+                } elseif (isset($_POST["addAll"])) {
+                    $users = $conn->query("
+                        SELECT id 
+                        FROM Students 
+                        WHERE class = ". $class
+                    );
+
+                    $query = "INSERT IGNORE LinksUsers(student, virtualClass) VALUES";
+                    if ($users->num_rows > 0) {
+                        while($row = $users->fetch_assoc())
+                            $query .= " (". $row["id"] .", ". $vclass ."),";
+
+                        $query = substr_replace($query, '', -1);
+                        $succ = $conn->query($query);
+    
+                        if (!$succ)
+                            $error("Unable to add all the students to the selected virtual class!");
+                    }
+
+                } elseif (isset($_POST["remove"])) {
+                    $vstudents = [];
+                    if (isset($_POST["vstudents"]))
+                        foreach ($_POST["vstudents"] as $vstudent)
+                            array_push($vstudents, $secureSQL($vstudent));
+
+                    if (count($vstudents) > 0) {
+                        $res = $conn->query("
+                            DELETE FROM LinksUsers 
+                            WHERE student IN (". implode(',', $vstudents) .")
+                        ");
+
+                        if (!$res)
+                            $error("Unable to remove the student/s to the selected virtual class!");
+                    }
                 }
             ?>
 
@@ -83,41 +170,71 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                 <input type="submit" value="+">
             </form>
 
-            <div class="scrollable">
-                <table>
-                    <?php
-                        if ($class != "") {
-                            $classes = $conn->query("
-                                SELECT v.id, v.tag 
-                                FROM VirtualClasses v 
-                                JOIN LinksGames l ON v.id = l.virtualClass 
-                                JOIN Games g ON l.game = g.id 
-                                WHERE g.id = ". $game ." 
-                                GROUP BY v.id 
-                                ORDER BY v.tag ASC
-                            ");
+            <h3>Students</h3>
+            <form method="post">
+                <input type="hidden" name="vclass" value="<?php echo $vclass ?>">
+                <input type="hidden" name="class" value="<?php echo $class ?>">
 
-                            $blacklist = [];
-                            if ($classes->num_rows > 0)
-                                while($row = $classes->fetch_assoc()) {
-                                    echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='students[]' type='checkbox' value='". $row["id"] ."' checked></td></tr>";
-                                    array_push($blacklist, $row["id"]);
-                                }
+                <div class="scrollable">
+                    <table>
+                        <?php
+                            if ($class != "") {
+                                $users = $conn->query("
+                                    SELECT *
+                                    FROM Students 
+                                    WHERE class = ". $class ." 
+                                    ORDER BY surname ASC
+                                ");
 
-                            $classes = $conn->query("
-                                SELECT id, tag 
-                                FROM VirtualClasses ".
-                                (count($blacklist) > 0 ? "WHERE id NOT IN (". implode(',', $blacklist) .") " : "").
-                                "ORDER BY tag ASC
-                            ");
+                                if ($users->num_rows > 0)
+                                    while($row = $users->fetch_assoc())
+                                        echo "<tr><td class='field'>". $row["surname"] ." ". $row["name"] ." - ". $row["username"] ."</td><td class='box'><input name='students[]' type='checkbox' value='". $row["id"] ."'></td></tr>";
+                            }
+                        ?>
+                    </table>
+                </div>
 
-                            if ($classes->num_rows > 0)
-                                while($row = $classes->fetch_assoc())
-                                    echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='students[]' type='checkbox' value='". $row["id"] ."'></td></tr>";
-                        }
-                    ?>
-                </table>
-            </div>
+                <input type="submit" name="add" value="->">
+                <input type="submit" name="addAll" value="->>">
+            </form>
+
+            <h3>Virtual Classes</h3>
+            <select id="vclassSelector" onchange="updateClass()">
+                <?php $vclassselector($vclass); ?>
+            </select>
+
+            <form action="VClass.php" method="get">
+                <input type="submit" value="+">
+            </form>
+
+            <h3>Virtual Students</h3>
+            <form method="post">
+                <input type="hidden" name="vclass" value="<?php echo $vclass ?>">
+                <input type="hidden" name="class" value="<?php echo $class ?>">
+
+                <div class="scrollable">
+                    <table>
+                        <?php
+                            if ($vclass != "") {
+                                $users = $conn->query("
+                                    SELECT s.surname, s.name, s.username, s.id
+                                    FROM Students s 
+                                    JOIN LinksUsers l ON s.id = l.student 
+                                    JOIN VirtualClasses v ON l.virtualClass = v.id 
+                                    WHERE v.id = ". $vclass ." 
+                                    ORDER BY s.surname ASC
+                                ");
+
+                                if ($users->num_rows > 0)
+                                    while($row = $users->fetch_assoc())
+                                        echo "<tr><td class='field'>". $row["surname"] ." ". $row["name"] ." - ". $row["username"] ."</td><td class='box'><input name='vstudents[]' type='checkbox' value='". $row["id"] ."'></td></tr>";
+                            }
+                        ?>
+                    </table>
+                </div>
+
+                <input type="submit" name="remove" value="x">
+            </form>
         </div>
     </body>
 </html>
