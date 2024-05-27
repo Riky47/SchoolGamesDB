@@ -45,6 +45,10 @@ if(!$user)
                 <input type="submit" class="submit" value="Account">
             </form>
 
+            <form action="Board.php" method="get">
+                <input type="submit" class="submit" value="Check board">
+            </form>
+
             <form action="Login.php" method="post">
                 <input type="submit" class="submit" name="logout" value="Logout">
             </form>

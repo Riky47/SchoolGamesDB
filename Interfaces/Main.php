@@ -34,6 +34,10 @@
                 <td class="field"><form action="<?php echo ($user ? "Login.php" : "Register.php"); ?>" method="post">
                     <input type="submit" class="submit" name="logout" value="<?php echo ($user ? "Logout" : "Register"); ?>">
                 </form></td>
+
+                <td class="field"><form action="Board.php" method="post">
+                    <input type="submit" class="submit" name="logout" value="Check board">
+                </form></td>
             </tr></table>
         </div>
     </body>
