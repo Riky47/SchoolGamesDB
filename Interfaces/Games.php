@@ -45,7 +45,7 @@ if(!$user)
         </form>
 
         <form id="playForm" action="Player.php" method="post">
-            <input id="playInput" type="hidden" name="play">
+            <input id="playInput" type="hidden" name="game">
         </form>
 
         <title>SchoolGamesDB</title>

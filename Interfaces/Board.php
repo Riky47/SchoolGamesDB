@@ -19,6 +19,7 @@
                 <h3>Your score</h3>
                 <?php
                     include_once(__DIR__. "/../Sources/SecureSQL.php");
+                    include_once(__DIR__. "/../Sources/Errors.php");
                     $score = 0;
 
                     if ($user) {
@@ -40,36 +41,93 @@
                     <?php
                         if ($user) {
                             $res = $conn->query("
-                                SELECT game, coins 
-                                FROM Rewards 
-                                WHERE student = ". $user["id"]
+                                SELECT g.title, r.coins 
+                                FROM Rewards r 
+                                JOIN Games g ON r.game = g.id 
+                                WHERE r.student = ". $user["id"]
                             );
 
                             if ($res->num_rows > 0)
                                 while ($row = $res->fetch_assoc())
-                                    echo "<p>". $row["game"] ." - ". $row["coins"] ."</p>";
+                                    echo "<p>". $row["title"] ." - ". $row["coins"] ."</p>";
+
+                            else
+                                $error("You have not collected any coin yet!");
                         }
                     ?>
                 </div>
-            <div>
+            </div>
 
             <div>
                 <h3>Leaderboard</h3>
-                <?php
-                    $query = "
-                        SELECT SUM(r.coins) 
-                        FROM Rewards r";
 
-                    if (isset($_POST["vclass"]))
-                        $query .= " JOIN LinksUsers l ON r.student = l.user 
-                        JOIN VirtualClasses v ON l.virtualClass = v.id";
+                <form method="post">
+                    <select name="vclass" required>
+                        <option value="0">All</option>
+                        <?php
+                            $class = "";
+                            $isclass = isset($_POST["vclass"]);
+                            if ($isclass) {
+                                $class = $secureSQL($_POST["vclass"]);
+                                $isclass = ($class != "0");
+                            }
 
-                    if (isset($_POST["game"]) && $_POST["game"] != "0")
-                        $query .= " WHERE r.game = ". $secureSQL($_POST["game"]);
+                            include_once(__DIR__. "/../Sources/Selectors.php");
+                            $vclassselector($class);
+                        ?>
+                    </select>
 
-                    $res = $conn->query($query);
-                ?>
-            <div>
+                    <select name="game" required>
+                        <option value="0">All</option>
+                        <?php
+                            $game = "";
+                            if (isset($_POST["game"]))
+                                $game = $secureSQL($_POST["game"]);
+
+                            $gamesselector($game);
+                        ?>
+                    </select>
+
+                    <input type="submit" value="set">
+                </form>
+
+                <div class="scrollable">
+                    <?php
+                        $qclass = ($isclass ? (" l.virtualClass = ". $class) : "");
+                        $query = "
+                            SELECT s.username, COALESCE(SUM(r.coins)) AS total
+                            FROM Rewards r 
+                            INNER JOIN Students s ON r.student = s.id 
+                            JOIN LinksUsers l ON r.student = l.student
+                        ";
+
+                        if (isset($_POST["game"]) && $_POST["game"] != "0")
+                            $query .= " WHERE r.game = ". $game .($isclass ? (" AND". $qclass) : "");
+
+                        elseif ($isclass)
+                            $query .= " WHERE". $qclass;
+
+                        $query .= " 
+                            GROUP BY r.student 
+                            ORDER BY total DESC
+                        ";
+
+                        $res = $conn->query($query);
+                        if ($res->num_rows > 0)
+                            while ($row = $res->fetch_assoc())
+                                echo "<p>". $row["username"] ." - ". $row["total"] ."</p>";
+
+                        else
+                            $error("No data has been found for the current filters!");
+                    ?>
+
+                    <p>If you can't see your score in the leaderboard, you'll have to make sure you are assigned to at least 1 virtual class!</p>
+                </div>
+
+                <form action="Portal.php" method="get">
+                    <input type="submit" class="submit" value="Back">
+                </form>
+            </div>
         </div>
     </body>
 </html>

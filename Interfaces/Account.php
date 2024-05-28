@@ -43,7 +43,8 @@ if(!$user)
                             surname = '". $secureSQL($_POST["surname"]) ."', 
                             username = '". $secureSQL($_POST["username"]) ."', 
                             email = '". $secureSQL($_POST["email"]) ."', 
-                            password = '". ((isset($_POST["password"]) && trim($_POST["password"]) != "") ? password_hash($_POST["password"], PASSWORD_ARGON2I) : $user["password"]) ."'
+                            password = '". ((isset($_POST["password"]) && trim($_POST["password"]) != "") ? password_hash($_POST["password"], PASSWORD_ARGON2I) : $user["password"]) ."' ".
+                            ($user["type"] == "student" ? (", class = ". $secureSQL($_POST["class"] ." ")) : "") ."
                         WHERE id = ". $user["id"]
                     );
 
@@ -80,9 +81,9 @@ if(!$user)
                     <?php
                         if ($user["type"] == "student") {
                             include_once(__DIR__. "/../Sources/Selectors.php");
-                            echo "<tr><td class='field'>Class:</td> <td class='box'>";
-                            $classselector();
-                            echo"<td></tr>";
+                            echo "<tr><td class='field'>Class:</td> <td class='box'><select name='class' required>";
+                            $classselector($user["class"]);
+                            echo"</select></td></tr>";
                         }
                     ?>
                 </table>

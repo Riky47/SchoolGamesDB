@@ -235,6 +235,10 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
 
                 <input type="submit" name="remove" value="x">
             </form>
+            
+            <form action="Portal.php" method="get">
+                <input type="submit" class="submit" value="Back"/>
+            </form>
         </div>
     </body>
 </html>

@@ -20,10 +20,6 @@ if(!$user)
         <div id="leaderDiv">
             <h3>Welcome back <?php echo $user["username"]; ?>!</h3>
 
-            <form action="Games.php" method="get">
-                <input type="submit" class="submit" value="Games">
-            </form>
-
             <?php
                 if ($user["type"] == "teacher")
                     echo "
@@ -38,7 +34,12 @@ if(!$user)
                     <form action='Classes.php' method='get'>
                         <input type='submit' class='submit' value='Manage classes'>
                     </form>
-                    "
+                    ";
+                else
+                    echo "
+                    <form action='Games.php' method='get'>
+                        <input type='submit' class='submit' value='Games'>
+                    </form>";
             ?>
 
             <form action="Account.php" method="get">
