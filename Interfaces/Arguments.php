@@ -30,7 +30,7 @@ elseif ($user["type"] == "student")
             <input id="argumentInput" type="hidden" name="argument">
         </form>
 
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/ArgumentStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
 

@@ -49,7 +49,7 @@ if(!$user)
         </form>
 
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/GamesStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
     <body>
@@ -57,7 +57,7 @@ if(!$user)
         <div id="space"></div>
 
         <div id="leaderDiv">
-            <h3>Games</h3>
+            <h2>Games</h2>
             <?php
                 include_once(__DIR__. "/../Sources/Selectors.php");
                 include_once(__DIR__. "/../Sources/Errors.php");
@@ -84,7 +84,7 @@ if(!$user)
             </select><br><br>
 
             <div class="scrollable">
-                <h2>Games</h2>
+                <h3>Games list</h3>
 
                 <?php
                     if ($arg != "") {
@@ -100,7 +100,7 @@ if(!$user)
                             $first = true;
                             while ($row = $games->fetch_assoc()) {
                                 $params = "previewGame('". $row["id"] ."', '". $row["title"] ."', '". $row["description"]. "', '". $row["coins"] ."')";
-                                echo "<button ". ($first ? "id='firstGame'" : "") ." onclick=\"" .$params. "\">". $row["title"] ."</button><br>";
+                                echo "<button ". ($first ? "id='firstGame'" : "") ." onclick=\"" .$params. "\">". $row["title"] ."</button> ";
                                 $first = false;
                             }
 
@@ -113,9 +113,9 @@ if(!$user)
             </div><br>
 
             <div class="scrollable">
-                <h2>Info</h2>
+                <h3>Info</h3>
 
-                <h3 id="gameTitle">Title</h3>
+                <h4 id="gameTitle">Title</h4    >
                 <p id="gameDescription">Description</p>
                 <p id="gameReward">Reward: 0</p>
                 

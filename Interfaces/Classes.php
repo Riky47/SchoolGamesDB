@@ -51,7 +51,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
         </form>
 
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/classesStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
 
@@ -166,7 +166,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                 <?php $classselector($class); ?>
             </select>
 
-            <form action="Class.php" method="get">
+            <form class="class" action="Class.php" method="get">
                 <input type="submit" value="+">
             </form>
 

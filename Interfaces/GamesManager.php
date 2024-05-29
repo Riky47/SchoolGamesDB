@@ -39,7 +39,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
         </form>
 
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/MenagerStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
     <body>

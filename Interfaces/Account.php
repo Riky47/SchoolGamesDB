@@ -12,7 +12,7 @@ if(!$user)
 <html>
     <head>
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/AccountStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
 
@@ -81,7 +81,7 @@ if(!$user)
                     <?php
                         if ($user["type"] == "student") {
                             include_once(__DIR__. "/../Sources/Selectors.php");
-                            echo "<tr><td class='field'>Class:</td> <td class='box'><select name='class' required>";
+                            echo "<tr><td class='field'>Class:</td> <td class='box'><select class='selector' name='class' required>";
                             $classselector($user["class"]);
                             echo"</select></td></tr>";
                         }

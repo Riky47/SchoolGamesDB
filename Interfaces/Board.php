@@ -6,7 +6,7 @@
 <html>
     <head>
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/GamesStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
 
@@ -62,7 +62,7 @@
                 <h3>Leaderboard</h3>
 
                 <form method="post">
-                    <select name="vclass" required>
+                    <select class="selector" name="vclass" required>
                         <option value="0">All</option>
                         <?php
                             $class = "";
@@ -77,7 +77,7 @@
                         ?>
                     </select>
 
-                    <select name="game" required>
+                    <select class="selector" name="game" required>
                         <option value="0">All</option>
                         <?php
                             $game = "";
@@ -88,7 +88,7 @@
                         ?>
                     </select>
 
-                    <input type="submit" value="set">
+                    <input class="submit" type="submit" value="set">
                 </form>
 
                 <div class="scrollable">

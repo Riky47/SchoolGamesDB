@@ -1,7 +1,7 @@
-input, .class, #typeSwitch{
-	border: none;
-	border-bottom: 2px solid #7B68EE;
-	width: 60%;
+#classSelector{
+    border: none;
+	border-bottom: 3px solid #7B68EE;
+	width: 100px;
 }
 .submit{
 	color: white;

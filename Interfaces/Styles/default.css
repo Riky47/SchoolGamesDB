@@ -3,14 +3,39 @@ h1{
 	color: white;
 	font-family: "Times New Roman", Times, serif;
 }
+h2{
+	text-align: center;
+	color: #5140af;
+}
 h3{
 	text-align: center;
-	color: #7B68EE;
+	color: #4f37d6;
+}
+h4{
+	text-align: center;
+	color: #4f37d6;
 }
 body {
 	background: #7B68EE;
 	background-image: linear-gradient(#483D8B, #7B68EE);
 	background-repeat: no-repeat;
+}
+#space{
+	width: 500px;
+	padding: 100px;
+}
+#leaderDiv{
+	width: 300px;
+	margin:0 auto;
+	border: 2px;
+  	padding: 20px;
+	background: white;
+	border-radius: 25px;
+	box-shadow: 15px 24px 24px 0 rgba(0, 0, 0, 0.24), 0 15px 35px 0 rgba(0, 0, 0, 0.19);
+
+}
+.error{
+	color: #ff0000;
 }
 .submit{
 	color: white;
@@ -20,9 +45,17 @@ body {
 	border-radius: 25px;
 	background-color: #483D8B;
 	cursor: pointer;
-	width: 80px;
-	margin: none;
+	width: auto;
+	margin:none;
 }
-.error{
-	color: #ff0000;
+button{
+	color: white;
+	font-family: Garamond;
+	padding: 8px 20px;
+	text-align: center;
+	border-radius: 25px;
+	background-color: #483D8B;
+	cursor: pointer;
+	width: auto;
+	border: none;
 }
