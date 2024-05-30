@@ -45,7 +45,7 @@ body {
 	border-radius: 25px;
 	background-color: #483D8B;
 	cursor: pointer;
-	width: auto;
+	width: 50%;
 	margin:none;
 }
 button{
@@ -56,6 +56,15 @@ button{
 	border-radius: 25px;
 	background-color: #483D8B;
 	cursor: pointer;
-	width: auto;
+	width: 50%;
 	border: none;
+}
+.scrollable{
+	overflow: scroll;
+	height: 200px;
+}
+input{
+	border: none;
+	border-bottom: 2px solid #7B68EE;
+	width: 60%;
 }

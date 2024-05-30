@@ -3,8 +3,8 @@
 <html>
     <head>
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
+        <link rel="stylesheet" href="Styles/RegisterStyle.css">
     </head>
 
     <body>

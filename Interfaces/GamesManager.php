@@ -145,9 +145,8 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                 <input type="submit" name="addGame" value="+">
             </form>
 
-            <div class="scrollable">
-                <h2>Games</h2>
-
+            <h2>Games</h2>
+            <div>
                 <?php
                     $info = [
                         "description" => "",

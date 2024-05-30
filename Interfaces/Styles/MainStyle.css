@@ -6,7 +6,7 @@
 	border-radius: 25px;
 	background-color: #483D8B;
 	cursor: pointer;
-	width: 100px;
+	width: 100%;
 	margin:none;
 }
 button{
@@ -17,6 +17,6 @@ button{
 	border-radius: 25px;
 	background-color: #483D8B;
 	cursor: pointer;
-	width: 100px;
+	width: 100%;
 	border: none;
 }

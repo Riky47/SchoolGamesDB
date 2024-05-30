@@ -19,7 +19,7 @@ $game = $secureSQL($_POST["game"]);
 <html>
     <head>
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/RegisterStyle.css">
+        <link rel="stylesheet" href="Styles/GamesStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
     </head>
     <body>
@@ -80,14 +80,14 @@ $game = $secureSQL($_POST["game"]);
                 <input type="hidden" name="game" value="<?php echo $game; ?>">
 
                 <p>Coins in game:</p>
-                <select name="reward" required>
+                <select class="selector" name="reward" required>
                     <?php
                         for ($i = 0; $i <= $coins; $i++)
                             echo "<option value=$i". ($i == $awarded ? " selected" : "") .">$i</option>";
                     ?>
                 </select><br>
 
-                <input type="submit" name="collect" value="Collect coins">
+                <input type="submit" class="selector" name="collect" value="Collect coins">
                 <p>This will set your coins for the current game</p>
             </form>
 

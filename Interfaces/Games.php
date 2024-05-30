@@ -83,9 +83,8 @@ if(!$user)
                 <?php $argumentselector($arg); ?>
             </select><br><br>
 
+            <h3>Games list</h3>
             <div class="scrollable">
-                <h3>Games list</h3>
-
                 <?php
                     if ($arg != "") {
                         include_once(__DIR__. "/../Sources/SecureSQL.php");
@@ -100,7 +99,7 @@ if(!$user)
                             $first = true;
                             while ($row = $games->fetch_assoc()) {
                                 $params = "previewGame('". $row["id"] ."', '". $row["title"] ."', '". $row["description"]. "', '". $row["coins"] ."')";
-                                echo "<button ". ($first ? "id='firstGame'" : "") ." onclick=\"" .$params. "\">". $row["title"] ."</button> ";
+                                echo "<button ". ($first ? "id='firstGame'" : "") ." onclick=\"" .$params. "\">". $row["title"] ."</button><br>";
                                 $first = false;
                             }
 
@@ -112,9 +111,8 @@ if(!$user)
                 ?>
             </div><br>
 
-            <div class="scrollable">
-                <h3>Info</h3>
-
+            <h3>Info</h3>
+            <div>
                 <h4 id="gameTitle">Title</h4    >
                 <p id="gameDescription">Description</p>
                 <p id="gameReward">Reward: 0</p>

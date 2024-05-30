@@ -1,12 +1,12 @@
 #classSelector{
     border: none;
 	border-bottom: 3px solid #7B68EE;
-	width: 100px;
+	width: 50%;
 }
 #vclassSelector, .class{
     border: none;
 	border-bottom: 3px solid #7B68EE;
-	width: 100px;
+	width: 50%;
 }
 .submit{
 	color: white;

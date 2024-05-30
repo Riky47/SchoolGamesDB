@@ -10,8 +10,8 @@ if(!$user)
 <html>
     <head>
         <title>SchoolGamesDB</title>
-        <link rel="stylesheet" href="Styles/MainStyle.css">
         <link rel="stylesheet" href="Styles/Default.css">
+        <link rel="stylesheet" href="Styles/MainStyle.css">
     </head>
     <body>
         <h1>SchoolGamesDB</h1>

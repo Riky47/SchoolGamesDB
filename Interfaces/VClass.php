@@ -217,8 +217,8 @@ elseif ($user["type"] == "student")
                 <br><input type="submit" class="submit" name="delete" value="Delete">
             </form>
 
-            <form action="Classes.php" method="get">
-                <input type="submit" class="submit" value="Back"/>
+            <form action="Classes.php" method="post">
+                <input type="submit" class="submit" name="back" value="Back"/>
             </form>
         </div>
     </body>

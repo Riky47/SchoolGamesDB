@@ -6,6 +6,9 @@ $user = $getuser();
 if(!$user)
     $redirect("Login.php");
 
+elseif (isset($_POST["back"]))
+    $redirect("Portal.php");
+
 elseif ($user["type"] == "student")
     $redirect("Portal.php");
 
@@ -166,7 +169,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                 <?php $classselector($class); ?>
             </select>
 
-            <form class="class" action="Class.php" method="get">
+            <form action="Class.php" method="get">
                 <input type="submit" value="+">
             </form>
 
