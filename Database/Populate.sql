@@ -172,8 +172,8 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `username`, `email`, `password`, `surname`, `name`, `class`) VALUES
-(2, 'Riky', 'riccardo.balducchi@gmail.com', '$argon2i$v=19$m=65536,t=4,p=1$eXg3MXA5T2NaMUJpcy9UMA$7yNb8U45+UR67lxmV1cgB36axPrqRQdQLJYJp9FtRmM', 'Balducchi', 'Riccardo', 1),
-(3, 'eda27', 'foresti.danilo@istitutoriva.it', '$argon2i$v=19$m=65536,t=4,p=1$YklCaUVzNzFVRWR3eWU1bQ$7lktvCTA++SpQ4DBnisLfXRzNUzaknMM6y8WT6HGXGw', 'Foresti', 'Danilo', 3);
+(2, 'Frank', 'francisco.franco@gmail.com', '$argon2i$v=19$m=65536,t=4,p=1$eXg3MXA5T2NaMUJpcy9UMA$7yNb8U45+UR67lxmV1cgB36axPrqRQdQLJYJp9FtRmM', 'Franco', 'Francisco', 1),
+(3, 'Camomil', 'camillo.benso@gmail.com', '$argon2i$v=19$m=65536,t=4,p=1$YklCaUVzNzFVRWR3eWU1bQ$7lktvCTA++SpQ4DBnisLfXRzNUzaknMM6y8WT6HGXGw', 'Benso', 'Camillo', 3);
 
 -- --------------------------------------------------------
 
@@ -195,7 +195,7 @@ CREATE TABLE `teachers` (
 --
 
 INSERT INTO `teachers` (`id`, `username`, `email`, `password`, `surname`, `name`) VALUES
-(1, 'Alfy', 'dibianco.alfonso@istitutoriva.it', '$argon2i$v=19$m=65536,t=4,p=1$OWdYOFBCRi5YY2E4Mm50OA$Q0vmtOc5T0xPxTTQz835SSGvr4vfc165hL4WUU4PwUg', 'Di Bianco', 'Alfonso');
+(1, 'Alcapone', 'al.capone@gmail.com', '$argon2i$v=19$m=65536,t=4,p=1$OWdYOFBCRi5YY2E4Mm50OA$Q0vmtOc5T0xPxTTQz835SSGvr4vfc165hL4WUU4PwUg', 'Al Capone', 'Capoccione');
 
 -- --------------------------------------------------------
 
