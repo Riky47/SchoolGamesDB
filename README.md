@@ -27,8 +27,12 @@ To set up the system locally, follow these steps:
 2. **Move the Repo Folder**
    - Move the repository folder to XAMPP's `htdocs` directory.
    - The default path is: `C:\xampp\htdocs`
+  
+3. **Setup Database**
+   - Run the `/Database/Database.sql` file to setup the database structure.
+   - This will eventually erase any other stored data under the database name `SchoolGamesDB`.
 
-3. **Access the System**
+5. **Access the System**
    - You can use the product locally by navigating to the `Main.php` page in your browser.
    - If you followed all the previous instructions, you should be able to access it by clicking [here](http://localhost/SchoolGamesDB/Interfaces/Main.php).
 
