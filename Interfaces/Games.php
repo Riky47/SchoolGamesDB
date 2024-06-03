@@ -90,8 +90,10 @@ if(!$user)
                         include_once(__DIR__. "/../Sources/SecureSQL.php");
                         $games = $conn->query("
                             SELECT * 
-                            FROM Games 
-                            WHERE argument = ". $secureSQL($arg) ." 
+                            FROM Games g
+                            JOIN LinksGames lg ON g.id = lg.game 
+                            JOIN LinksUsers lu ON lu.student = ". $user["id"] ." 
+                            WHERE argument = ". $secureSQL($arg) ." AND lg.virtualClass = lu.virtualClass 
                             ORDER BY title ASC
                         ");
 
@@ -104,7 +106,7 @@ if(!$user)
                             }
 
                         } else
-                            $error("No games found!");
+                            $error("No games found for this argument for you, if you cant find any make sure to be part of a virtual class!");
 
                     } else
                         $error("No argument found!");

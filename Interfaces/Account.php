@@ -92,6 +92,24 @@ if(!$user)
                 <br><input type="submit" class="submit" name="delete" value="Delete">
             </form>
 
+            <h3>Virtual Classes you are in:</h3>
+            <div class="scrollable">
+                <?php
+                    $res = $conn->query("
+                        SELECT tag, subject 
+                        FROM VirtualClasses v 
+                        JOIN LinksUsers l ON v.id = l.virtualClass 
+                        WHERE l.student = ". $user["id"] ."
+                    ");
+
+                    if ($res->num_rows > 0)
+                        while ($row = $res->fetch_assoc())
+                            echo "<p><strong>". $row["tag"] ."</strong> - ". $row["subject"] ."</p>";
+                    else
+                        $error("You are not part of any virtual class! talk to your teacher.");
+                ?>
+            </div><br>
+
             <form action="Portal.php" method="get">
                 <input type="submit" class="submit" value="Back"/>
             </form>

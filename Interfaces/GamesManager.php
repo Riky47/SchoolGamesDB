@@ -204,7 +204,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                         <?php
                             if ($game != "") {
                                 $classes = $conn->query("
-                                    SELECT v.id, v.tag 
+                                    SELECT v.id, v.tag, v.subject 
                                     FROM VirtualClasses v 
                                     JOIN LinksGames l ON v.id = l.virtualClass 
                                     JOIN Games g ON l.game = g.id 
@@ -216,12 +216,12 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                                 $blacklist = [];
                                 if ($classes->num_rows > 0)
                                     while($row = $classes->fetch_assoc()) {
-                                        echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='classes[]' type='checkbox' value='". $row["id"] ."' checked></td></tr>";
+                                        echo "<tr><td class='field'><strong>". $row["tag"] ."</strong> - ". $row["subject"] ."</td><td class='box'><input name='classes[]' type='checkbox' value='". $row["id"] ."' checked></td></tr>";
                                         array_push($blacklist, $row["id"]);
                                     }
 
                                 $classes = $conn->query("
-                                    SELECT id, tag 
+                                    SELECT id, tag, subject 
                                     FROM VirtualClasses ".
                                     (count($blacklist) > 0 ? "WHERE id NOT IN (". implode(',', $blacklist) .") " : "").
                                     "ORDER BY tag ASC
@@ -229,7 +229,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
 
                                 if ($classes->num_rows > 0)
                                     while($row = $classes->fetch_assoc())
-                                        echo "<tr><td class='field'>". $row["tag"] ."</td><td class='box'><input name='classes[]' type='checkbox' value='". $row["id"] ."'></td></tr>";
+                                        echo "<tr><td class='field'><strong>". $row["tag"] ."</strong> - ". $row["subject"] ."</td><td class='box'><input name='classes[]' type='checkbox' value='". $row["id"] ."'></td></tr>";
                             }
                         ?>
                         </table>
