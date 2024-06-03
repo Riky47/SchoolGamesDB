@@ -44,12 +44,13 @@
                                 SELECT g.title, r.coins 
                                 FROM Rewards r 
                                 JOIN Games g ON r.game = g.id 
-                                WHERE r.student = ". $user["id"]
-                            );
+                                WHERE r.student = ". $user["id"] ." 
+                                ORDER BY r.coins DESC
+                            ");
 
                             if ($res->num_rows > 0)
                                 while ($row = $res->fetch_assoc())
-                                    echo "<p>". $row["title"] ." - ". $row["coins"] ."</p>";
+                                    echo "<p><strong>". $row["title"] ."</strong> - ". $row["coins"] ."</p>";
 
                             else
                                 $error("You have not collected any coin yet!");
@@ -115,7 +116,7 @@
                         $res = $conn->query($query);
                         if ($res->num_rows > 0)
                             while ($row = $res->fetch_assoc())
-                                echo "<p>". $row["username"] ." - ". $row["total"] ."</p>";
+                                echo "<p><strong>". $row["username"] ."</strong> - ". $row["total"] ."</p>";
 
                         else
                             $error("No data has been found for the current filters!");
