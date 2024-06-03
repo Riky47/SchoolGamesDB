@@ -27,7 +27,9 @@ if(!$user)
             }
 
             function playGame() {
-                document.getElementById("playForm").submit()
+                const value = document.getElementById("playInput").value
+                if (value && value != "" && value > 0)
+                    document.getElementById("playForm").submit()
             }
 
             function load() {
@@ -89,7 +91,7 @@ if(!$user)
                     if ($arg != "") {
                         include_once(__DIR__. "/../Sources/SecureSQL.php");
                         $games = $conn->query("
-                            SELECT * 
+                            SELECT g.id, g.title, g.description, g.coins 
                             FROM Games g
                             JOIN LinksGames lg ON g.id = lg.game 
                             JOIN LinksUsers lu ON lu.student = ". $user["id"] ." 
