@@ -120,10 +120,9 @@
                         else
                             $error("No data has been found for the current filters!");
                     ?>
-
-                    <p>If you can't see your score in the leaderboard, you'll have to make sure you are assigned to at least 1 virtual class!</p>
                 </div>
 
+                <p>If you can't see your score in the leaderboard, you'll have to make sure you are assigned to at least 1 virtual class!</p>
                 <form action="Portal.php" method="get">
                     <input type="submit" class="submit" value="Back">
                 </form>
