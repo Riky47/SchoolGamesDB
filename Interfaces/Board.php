@@ -20,21 +20,29 @@
                 <?php
                     include_once(__DIR__. "/../Sources/SecureSQL.php");
                     include_once(__DIR__. "/../Sources/Errors.php");
-                    $score = 0;
 
                     if ($user) {
-                        $res = $conn->query("
-                            SELECT SUM(coins) AS score
-                            FROM Rewards 
-                            WHERE student = ". $user["id"]. " 
-                            LIMIT 1
-                        ");
+                        if($user["type"] == "student") {
+                            $score = 0;
 
-                        if ($res->num_rows > 0)
-                            $score = $res->fetch_assoc()["score"];
-                    }
+                            if ($user) {
+                                $res = $conn->query("
+                                    SELECT SUM(coins) AS score
+                                    FROM Rewards 
+                                    WHERE student = ". $user["id"]. " 
+                                    LIMIT 1
+                                ");
 
-                    echo "<h2>". (int)$score ."</h2>";
+                                if ($res->num_rows > 0)
+                                    $score = $res->fetch_assoc()["score"];
+                            }
+
+                            echo "<h2>". (int)$score ."</h2>";
+
+                        } else
+                            $error("Only students are able to earn coins!");
+                    } else
+                        $error("Log in as student to see your score!");
                 ?>
 
                 <div class="scrollable">
