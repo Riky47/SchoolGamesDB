@@ -169,7 +169,7 @@ elseif ($user["type"] == "student")
             </form>
 
             <form action="Portal.php" method="get">
-                <input type="submit" class="submit" value="Discard"/>
+                <input type="submit" class="submit" value="Back"/>
             </form>
         </div>
     </body>

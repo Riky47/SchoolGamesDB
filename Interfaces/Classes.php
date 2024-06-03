@@ -6,8 +6,8 @@ $user = $getuser();
 if(!$user)
     $redirect("Login.php");
 
-elseif (isset($_POST["back"]))
-    $redirect("Portal.php");
+//elseif (isset($_POST["back"]))
+    //$redirect("Portal.php");
 
 elseif ($user["type"] == "student")
     $redirect("Portal.php");
@@ -156,7 +156,7 @@ if ($res->num_rows <= 0 || $res->fetch_assoc()["count"] <= 0)
                     if (count($vstudents) > 0) {
                         $res = $conn->query("
                             DELETE FROM LinksUsers 
-                            WHERE student IN (". implode(',', $vstudents) .")
+                            WHERE student IN (". implode(',', $vstudents) .") AND virtualClass = $vclass
                         ");
 
                         if (!$res)
