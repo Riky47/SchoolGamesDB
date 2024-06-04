@@ -47,7 +47,7 @@
 
                 <div class="scrollable">
                     <?php
-                        if ($user) {
+                        if ($user && $user["type"] == "student") {
                             $res = $conn->query("
                                 SELECT g.title, r.coins 
                                 FROM Rewards r 
